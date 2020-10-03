@@ -1,0 +1,1 @@
+void updateTheos() {	[CM RunCMD: @"echo \"$THEOS/bin/update-theos\" | GaPp" WaitUntilExit: YES];	theosUpdate = YES;}

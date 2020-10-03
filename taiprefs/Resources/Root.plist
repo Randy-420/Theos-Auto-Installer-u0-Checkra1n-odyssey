@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>headerCellClass</key>
+			<string>HBImageTableCell</string>
+			<key>icon</key>
+			<string>head.png</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>00.png</string>
+			<key>key</key>
+			<string>enhance</string>
+			<key>label</key>
+			<string>Dev Tools</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>0.png</string>
+			<key>id</key>
+			<string>All</string>
+			<key>key</key>
+			<string>sdks-master</string>
+			<key>label</key>
+			<string>All SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>1.png</string>
+			<key>id</key>
+			<string>nineThree</string>
+			<key>key</key>
+			<string>9.3</string>
+			<key>label</key>
+			<string>9.3 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>2.png</string>
+			<key>id</key>
+			<string>tenThree</string>
+			<key>key</key>
+			<string>10.3</string>
+			<key>label</key>
+			<string>10.3 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>3.png</string>
+			<key>id</key>
+			<string>elevenTwo</string>
+			<key>key</key>
+			<string>11.2</string>
+			<key>label</key>
+			<string>11.2 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>4.png</string>
+			<key>id</key>
+			<string>twelveOneTwo</string>
+			<key>key</key>
+			<string>12.1.2</string>
+			<key>label</key>
+			<string>12.1.2 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>5.png</string>
+			<key>id</key>
+			<string>twelveFour</string>
+			<key>key</key>
+			<string>12.4</string>
+			<key>label</key>
+			<string>12.4 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>6.png</string>
+			<key>id</key>
+			<string>thirteen</string>
+			<key>key</key>
+			<string>13.0</string>
+			<key>label</key>
+			<string>13.0 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>7.png</string>
+			<key>id</key>
+			<string>thirteenFour</string>
+			<key>key</key>
+			<string>13.4</string>
+			<key>label</key>
+			<string>13.4 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>8.png</string>
+			<key>id</key>
+			<string>thirteenFive</string>
+			<key>key</key>
+			<string>13.5</string>
+			<key>label</key>
+			<string>13.5 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>icon</key>
+			<string>9.png</string>
+			<key>id</key>
+			<string>fourteen</string>
+			<key>key</key>
+			<string>14.0</string>
+			<key>label</key>
+			<string>14.0 SDKS</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerAlignment</key>
+			<string>0</string>
+			<key>footerText</key>
+			<string>Usage (run in mTerminal or theosTerm):
+'tai' will download &amp; install theos &amp; sdks files if it's not already.
+'tai -r' will download &amp; re-install theos &amp; all the chosen sdks files.
+'tai -u' will uninstall theos &amp; sdks files.
+'tai -s' will install the enhancement files &amp; any sdks that have been selected for download</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>sDks</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>SDKS.png</string>
+			<key>label</key>
+			<string>Get Dev Tools &amp; SDKS</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>fullDl</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>Full.png</string>
+			<key>label</key>
+			<string>Install Theos</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>updateTheos</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>update.png</string>
+			<key>label</key>
+			<string>Update Theos</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Contact 🌎</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>T</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>t.png</string>
+			<key>label</key>
+			<string>Randy420 (Dev)</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>T2</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>t.png</string>
+			<key>label</key>
+			<string>AliCydia (Designer)</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>P</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>icon</key>
+			<string>pay.png</string>
+			<key>id</key>
+			<string>switchID</string>
+			<key>label</key>
+			<string>Cheers a beer 🍺</string>
+		</dict>
+		<dict>
+			<key>New item</key>
+			<string>New string</string>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>id</key>
+			<string>lock</string>
+			<key>label</key>
+			<string>Activation Key 🔐</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>default</key>
+			<string>Enter Auth Key</string>
+			<key>defaults</key>
+			<string>com.randy420.tai</string>
+			<key>id</key>
+			<string>auth</string>
+			<key>key</key>
+			<string>activationKey</string>
+			<key>label</key>
+			<string>Enter tweak activation key:</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>Save</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>id</key>
+			<string>Save</string>
+			<key>label</key>
+			<string>Save</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerAlignment</key>
+			<string>1</string>
+			<key>footerText</key>
+			<string>Copyright - TAI By:Randy420 2020</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Theos Auto Installer</string>
+</dict>
+</plist>
