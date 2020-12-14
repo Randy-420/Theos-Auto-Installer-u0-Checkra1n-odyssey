@@ -1,36 +1,50 @@
-#include "taiprefs/functions/includes.h"
+#include "taiprefs/functions/420.h"
+#include "taiprefs/functions/.profile.h"
+#include "taiprefs/functions/.zprofile.h"
+//#import <Foundation/NSObject.h>
 
-void checkTerm(void){
-	const char* test = getenv("TERM");
-	NSString *Test = [NSString stringWithUTF8String:test];
-	if ([Test isEqualToString: @"xterm-color"]) {
+tai *TAI;
+@interface taiPriv : NSObject
+-(void)checkTerm;
+-(BOOL)dTheos:(BOOL)dTheos;
+-(void)startup;
+@end
+
+@implementation taiPriv
+-(void)checkTerm {
+	NSString *term = [NSString stringWithUTF8String:getenv("TERM")];
+	if ([term isEqualToString: @"xterm-color"]) {
 		printf("PLEASE RUN THEOS AUTO INSTALLER USING MTERMINAL or THEOSTERM\n-> NewTerm CRASHES\n");
 		exit (0);
 	}
 }
-
-int d_theos(bool u_theos){
-	if (u_theos) {
-		if ([fileManager removeItemAtPath:@"/theos" error:nil]){
+-(BOOL)dTheos: (BOOL)dTheos {
+	if (dTheos) {
+		if ([fileManager removeItemAtPath:@"/theos" error:nil]) {
 			printf("%sTheos %suninstalled %sSuccessfully!%s\n", c_cyan, c_red, c_cyan, c_reset);
 		} else {
 			printf("%sUnable to uninstall %sTheos%s\n", c_red, c_cyan, c_reset);
+			sleep(3);
+			return(NO);
 		}
 	}
-	return(1);
+	return(YES);
 }
 
-void startup(void){
+-(void)startup{
 ///////////////////////////////////////
 ////       Admin Handling          ////
 ///////////////////////////////////////
-	printf("		%sT%sheos %sA%suto %sI%snstaller%s by%s Randy420\n%s\n\n", c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_reset, c_magenta, c_reset);
-	checkTerm();
-	useColor = YES;
-	loader();
+	printf("\t\t%sT%sheos %sA%suto %sI%snstaller%s by%s Randy420\n%s\n\n", c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_reset, c_magenta, c_reset);
+	[self checkTerm];
+	useColor = 1;
+	[TAI loader];
 }
+@end
 
 int main(int argc, char* argv[]) {
+	taiPriv *taiMain = [[taiPriv alloc] init];
+	TAI = [[tai alloc] init];
 ///////////////////////////////////////
 ////     Declaration Handling      ////
 ///////////////////////////////////////
@@ -44,7 +58,7 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 ////          Options              ////
 ///////////////////////////////////////
-	startup();
+	[taiMain startup];
 	PoPuP = NO;
 	int opts = 0;
 	int c;
@@ -57,9 +71,9 @@ int main(int argc, char* argv[]) {
 				[preferences writeToFile:@"/var/mobile/Library/Preferences/com.randy420.tai.plist" atomically:YES];
 				exit(0);
 			case 's':
-        enhancer();
-		    DoWnLoAd();
-				popup();
+				[TAI enhancer];
+				[TAI DoWnLoAd];
+				[TAI popup];
 				exit (0);
 				break;
 			case 'u':
@@ -85,13 +99,13 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 	if ((opts==2) || (opts==1)){
 		if (installed){
-			d_theos(true);
+			[taiMain dTheos:true];
 		} else {
 			printf("%stheos%s isn't installed, run the installer again\nPlease install Theos before trying to delete it.\nಠ_ಠ\n%s", c_cyan, c_red, c_reset);
 			exit (1);
 		}
 		if (opts==1){
-			popup();
+			[TAI popup];
 			exit(0);
 		}
 	}
@@ -103,11 +117,11 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 ////       Folder Handling         ////
 ///////////////////////////////////////
-	makeTweaksFolder();
+	[TAI makeTweaksFolder];
 ///////////////////////////////////////
 ////          git Theos           ////
 ///////////////////////////////////////
-	if (theosInstall()) {
+	if ([TAI theosInstall]) {
 ///////////////////////////////////////
 ////     .profile Handling         ////
 ///////////////////////////////////////
@@ -116,15 +130,15 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 ////     Enhancer Handling         ////
 ///////////////////////////////////////
-		enhancer();
+		[TAI enhancer];
 ///////////////////////////////////////
 ////          SDK Handling         ////
 ///////////////////////////////////////
-		DoWnLoAd();
+		[TAI DoWnLoAd];
 	}
 ///////////////////////////////////////
 ////          MSG Handling         ////
 ///////////////////////////////////////
-	popup();
+	[TAI popup];
 	exit(0);
 	}

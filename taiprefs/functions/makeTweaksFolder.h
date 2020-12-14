@@ -1,1 +1,0 @@
-void makeTweaksFolder(){	if (![fileManager fileExistsAtPath:@"/var/mobile/tweaks"]){		[CM RunCMD:@"echo \"mkdir /var/mobile/tweaks\" | GaPp" WaitUntilExit: YES];		if ([fileManager fileExistsAtPath:@"/var/mobile/tweaks"]){			tweaksMade = YES;			folderFailed =NO;		}else{			folderFailed = YES;			tweaksMade = NO;		}	}}

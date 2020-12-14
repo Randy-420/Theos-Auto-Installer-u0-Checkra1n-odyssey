@@ -1,1 +1,0 @@
-void addMsg(char mSg[]){	msg = [NSString stringWithFormat:@"%@%s\n", msg, mSg];}

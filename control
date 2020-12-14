@@ -7,6 +7,6 @@ Description: Install theos and setup everything you need with 1 simple command. 
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <diablo_rules78@hotmail.com>
 Author: Randy420 <randy.skinner@hotmail.com>
-Version: 1.2.1
+Version: 1.2.2
 Section: System
 Tag: role::hacker

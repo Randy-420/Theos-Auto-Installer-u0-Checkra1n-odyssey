@@ -3,9 +3,11 @@
 -(BOOL)containsSpecifier:(PSSpecifier *)arg1;
 @end
 @implementation taiprRootListController
+	tai *TAI;
 - (NSArray *)specifiers {
+	TAI = [[tai alloc] init];
 	NSArray *chosenIDs = @[@"lock", @"auth", @"Save", @"nineThree", @"tenThree", @"elevenTwo", @"twelveOneTwo", @"twelveFour", @"thirteen", @"thirteenFour", @"thirteenFive", @"fourteen"];
-	loader();
+	[TAI loader];
 	saveUDIDOnDecline = NO;
 	if (!_specifiers) {
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
@@ -30,7 +32,7 @@
 		}
 	}
 
-	if(udidCheck((char*)PW, (char*)LoC, (char*)keyUrL)) {
+	if([TAI udidCheck:PW prefPLIsT:LoC path:keyUrL]) {
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"lock"], self.savedSpecifiers[@"auth"], self.savedSpecifiers[@"Save"]] animated:YES];
 	} else if (!([self containsSpecifier:self.savedSpecifiers[@"lock"]] || [self containsSpecifier:self.savedSpecifiers[@"auth"]] || [self containsSpecifier:self.savedSpecifiers[@"Save"]])) {
 		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"lock"], self.savedSpecifiers[@"auth"], self.savedSpecifiers[@"Save"]] afterSpecifierID:@"switchID" animated:YES];
@@ -39,7 +41,7 @@
 
 -(void)reloadSpecifiers {
 	[super reloadSpecifiers];
-	if(udidCheck((char*)PW, (char*)LoC, (char*)keyUrL)) {
+	if([TAI udidCheck:PW prefPLIsT:LoC path:keyUrL]) {
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"lock"], self.savedSpecifiers[@"auth"], self.savedSpecifiers[@"Save"]] animated:YES];
 	}
 	if([preferences[@"sdks-master"] boolValue]) {
@@ -53,33 +55,33 @@
 }
 
 -(void)sDks {
-	loader();
-	if (udidCheck((char*)PW, (char*)LoC, (char*)keyUrL)){
-		enhancer();
-		DoWnLoAd();
+	[TAI loader];
+	if ([TAI udidCheck:PW prefPLIsT:LoC path:keyUrL]){
+		[TAI enhancer];
+		[TAI DoWnLoAd];
 	}
-	popup();
+	[TAI popup];
 }
 
 -(void)fullDl {
-	loader();
-	if (udidCheck((char*)PW, (char*)LoC, (char*)keyUrL)){
-		if (theosInstall()) {
+	[TAI loader];
+	if ([TAI udidCheck:PW prefPLIsT:LoC path:keyUrL]){
+		if ([TAI theosInstall]) {
 			Profile(YES);
 			zProfile(YES);
 		}
-		enhancer();
-		DoWnLoAd();
+		[TAI enhancer];
+		[TAI DoWnLoAd];
 	}
-	popup();
+	[TAI popup];
 }
 
 -(void)updateTheos {
-	loader();
-	if (udidCheck((char*)PW, (char*)LoC, (char*)keyUrL)){
-		updateTheos();
+	[TAI loader];
+	if ([TAI udidCheck:PW prefPLIsT:LoC path:keyUrL]){
+		[TAI upDateTheos];
 	}
-	popup();
+	[TAI popup];
 }
 
 -(void)T {
@@ -96,8 +98,8 @@
 
 -(void)Save {
 	[self.view endEditing:YES];
-	loader();
-	udidCheck((char*)PW, (char*)LoC, (char*)keyUrL);
+	[TAI loader];
+	[TAI udidCheck:PW prefPLIsT:LoC path:keyUrL];
 	[super reloadSpecifiers];
 	[self reloadSpecifiers];
 }

@@ -12,7 +12,9 @@
 #include <CepheiPrefs/HBRootListController.h>
 #include <stdio.h>
 #include <dirent.h>
-#include "functions/includes.h"
+#include "functions/420.h"
+#include "functions/.profile.h"
+#include "functions/.zprofile.h"
 
 @interface taiprRootListController : PSListController
 @property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
