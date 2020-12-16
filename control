@@ -3,7 +3,7 @@ Name: Theos Auto Installer
 Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid, rsync, make, perl, odcctools, darwintools, com.bingner.plutil, com.randy420.tools, ws.hbang.common, mterminal
 Conflicts: net.howett.theos, org.coolstar.cctools, org.coolstar.llvm-clang, org.coolstar.llvm-clang64
 Architecture: iphoneos-arm
-Description: Install theos and setup everything you need with 1 simple command. Works on iOS 11, 12, 13 and 14 unc0ver, checkra1n & odyssey. Supports compiling arm7, armv7s, arm64, arm64e. Mterminal only! Don't use NewTerm as it crashes. Usage: 'tai' will download and install theos & sdks files if it's not already. 'tai -r' will download and re-install theos and all the required sdks files. 'tai -u' will uninstall theos & sdks files. 'tai -s' will download sdks only.   THEOS WIKI - https://github.com/theos/theos/wiki
+Description: Install theos and setup everything you need with 1 simple command. Works on iOS 11, 12, 13 and 14 unc0ver, checkra1n & odyssey. Supports compiling armv7, armv7s, arm64, arm64e. Mterminal only! Don't use NewTerm as it crashes. Usage: 'tai' will download and install theos & sdks files if it's not already. 'tai -r' will download and re-install theos and all the required sdks files. 'tai -u' will uninstall theos & sdks files. 'tai -s' will download sdks only.   THEOS WIKI - https://github.com/theos/theos/wiki
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <randy.skinner@hotmail.com>
 Author: Randy420 <randy.skinner@hotmail.com>
