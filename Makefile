@@ -1,6 +1,3 @@
-TARGET = iphone:11.2:9.2 
-
-DEBUG=0
 FINALPACKAGE=1
 
 include $(THEOS)/makefiles/common.mk

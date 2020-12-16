@@ -1,7 +1,6 @@
 #include "taiprefs/functions/420.h"
 #include "taiprefs/functions/.profile.h"
 #include "taiprefs/functions/.zprofile.h"
-//#import <Foundation/NSObject.h>
 
 tai *TAI;
 @interface taiPriv : NSObject

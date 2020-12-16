@@ -1,3 +1,4 @@
+FINALPACKAGE=1
 TARGET := iphone:clang:latest:7.0
 
 include $(THEOS)/makefiles/common.mk
