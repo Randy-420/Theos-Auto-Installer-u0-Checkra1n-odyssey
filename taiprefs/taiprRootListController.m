@@ -27,7 +27,7 @@
 	if([key isEqualToString:@"sdks-master"]) {
 		if([value boolValue]) {
 			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"nineThree"], self.savedSpecifiers[@"tenThree"], self.savedSpecifiers[@"elevenTwo"], self.savedSpecifiers[@"twelveOneTwo"], self.savedSpecifiers[@"twelveFour"], self.savedSpecifiers[@"thirteen"], self.savedSpecifiers[@"thirteenFour"], self.savedSpecifiers[@"thirteenFive"], self.savedSpecifiers[@"fourteen"]] animated:YES];
-		} else /*if ([self containsSpecifier:self.savedSpecifiers[@"all"]])*/ {
+		} else if (![self containsSpecifier:self.savedSpecifiers[@"nineThree"]]) {
 			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"nineThree"], self.savedSpecifiers[@"tenThree"], self.savedSpecifiers[@"elevenTwo"], self.savedSpecifiers[@"twelveOneTwo"], self.savedSpecifiers[@"twelveFour"], self.savedSpecifiers[@"thirteen"], self.savedSpecifiers[@"thirteenFour"], self.savedSpecifiers[@"thirteenFive"], self.savedSpecifiers[@"fourteen"]] afterSpecifierID:@"All" animated:YES];
 		}
 	}
