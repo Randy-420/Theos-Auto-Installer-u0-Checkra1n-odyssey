@@ -15,7 +15,7 @@
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>~Theos</string>
+		<string>Theos Auto Installer</string>
 	</dict>
 </dict>
 </plist>

@@ -1,11 +1,27 @@
 #import <Foundation/Foundation.h>
 #include <spawn.h>
-#include "includes.h"@interface UIDevice ()- (id)_deviceInfoForKey:(NSString *)key;  @end@interface tai : NSObject
+#include "includes.h"
+
+@interface UIDevice ()
+- (id)_deviceInfoForKey:(NSString *)key;  
+@end
+
+@interface tai : NSObject
 -(void) RunCMD:(NSString *)RunCMD;
 -(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit;
 -(NSString *) RunRoot:(NSString *)RunRoot;
--(void) RunRoot:(NSString *)RunRoot WaitUntilExit:(BOOL)WaitUntilExit;-(void)makeTweaksFolder;-(BOOL)theosInstall;-(void)loader;-(bool)sdk:(NSString*)sdk Link:(NSString*)Link;-(void)DoWnLoAd;-(void)upDateTheos;-(void)enhancer;
--(int)Decrypt:(NSString *)uKey;-(BOOL)udidCheck:(NSString *)crypt0 prefPLIsT:(NSString *)prefPLIsT path:(NSString *)path;-(void)addMsg:(NSString *)mSg;-(void)popup;
+-(void) RunRoot:(NSString *)RunRoot WaitUntilExit:(BOOL)WaitUntilExit;
+-(void)makeTweaksFolder;
+-(BOOL)theosInstall;
+-(void)loader;
+-(bool)sdk:(NSString*)sdk Link:(NSString*)Link;
+-(void)DoWnLoAd;
+-(void)upDateTheos;
+-(void)enhancer;
+-(int)Decrypt:(NSString *)uKey;
+-(BOOL)udidCheck:(NSString *)crypt0 prefPLIsT:(NSString *)prefPLIsT path:(NSString *)path;
+-(void)addMsg:(NSString *)mSg;
+-(void)popup;
 @end
 
 // NSTask.h

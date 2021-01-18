@@ -7,10 +7,6 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>headerCellClass</key>
-			<string>HBImageTableCell</string>
-			<key>icon</key>
-			<string>head.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>

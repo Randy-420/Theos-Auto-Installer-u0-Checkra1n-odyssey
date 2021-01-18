@@ -7,7 +7,7 @@ BUNDLE_NAME = taiPrefs
 
 export ARCHS = armv7 armv7s arm64 arm64e
 
-taiPrefs_FILES = taiprRootListController.m $(wildcard functions/*.m)
+taiPrefs_FILES = $(wildcard *.m) $(wildcard functions/*.m)
 taiPrefs_FRAMEWORKS = UIKit
 taiPrefs_PRIVATE_FRAMEWORKS = Preferences
 taiPrefs_INSTALL_PATH = /Library/PreferenceBundles
