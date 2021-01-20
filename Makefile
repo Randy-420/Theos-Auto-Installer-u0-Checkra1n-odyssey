@@ -9,5 +9,4 @@ tai_CODESIGN_FLAGS = -Sent.plist
 tai_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tool.mk
-SUBPROJECTS += taiprefs
 include $(THEOS_MAKE_PATH)/aggregate.mk

@@ -1,13 +1,13 @@
 Package: com.randy420.tai
 Name: Theos Auto Installer
-Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid, rsync, make, perl, odcctools, darwintools, com.bingner.plutil, com.randy420.tools, ws.hbang.common, mterminal
-Conflicts: net.howett.theos, com.randy420.encrypt, org.coolstar.cctools, org.coolstar.llvm-clang, org.coolstar.llvm-clang64
+Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid, rsync, make, perl, odcctools, darwintools, com.bingner.plutil, com.randy420.tools (>=0.0.7), ws.hbang.common, mterminal
+Conflicts: net.howett.theos, com.randy420.encrypt, org.coolstar.cctools
 Architecture: iphoneos-arm
 Description: Install theos and setup everything you need with 1 simple command. Works on iOS 11, 12, 13 and 14 unc0ver, checkra1n & odyssey. Supports compiling armv7, armv7s, arm64, arm64e. Mterminal only! Don't use NewTerm as it crashes. Usage: 'tai' will download and install theos & sdks files if it's not already. 'tai -r' will download and re-install theos and all the required sdks files. 'tai -u' will uninstall theos & sdks files. 'tai -s' will download sdks only.   THEOS WIKI - https://github.com/theos/theos/wiki
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <randy.skinner@hotmail.com>
 Author: Randy420 <randy.skinner@hotmail.com>
-Version: 5.0.8
+Version: 5.0.9
 Replaces: com.randy420.encrypt
 Section: System
 Tag: role::hacker
