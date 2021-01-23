@@ -61,7 +61,11 @@ int main(int argc, char* argv[]) {
 	PoPuP = NO;
 	int opts = 0;
 	int c;
-	installed = [fileManager fileExistsAtPath:@"/theos"];
+	if (!installedTheos && !installedVarTheos) {
+		installed = NO;
+	} else {
+		installed = YES;
+	}
 	while ((c = getopt(argc, argv, ":surp")) != -1) {
 		switch (c) {
 			case 'p':
@@ -108,8 +112,8 @@ int main(int argc, char* argv[]) {
 			exit(0);
 		}
 	}
-	installed = [fileManager fileExistsAtPath:@"/theos"];
-	if (installed) {
+	[TAI loader];
+	if (installedTheos || installedVarTheos) {
 		printf("%sTheos%s already installed, run '%stai -r%s' to reinstall or '%stai -u%s' to uninstall%s\n", c_cyan, c_green, c_cyan, c_green, c_cyan, c_red, c_reset);
 		exit(1);
 	}

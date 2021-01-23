@@ -111,7 +111,8 @@ id CC(NSString *CMD) {
 }
 -(void)makeTweaksFolder {
 	if (![fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
-		[self RunCMD : @"echo \"mkdir /var/mobile/tweaks\" | GaPp" WaitUntilExit: YES] ;
+		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | GaPp"];
+		[self RunCMD:runCode  WaitUntilExit: YES] ;
 		if ([fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
 			tweaksMade = YES;
 			folderFailed = NO;
@@ -125,13 +126,13 @@ id CC(NSString *CMD) {
 
 -(BOOL)theosInstall {
 	attempted = YES;
-	if (![fileManager fileExistsAtPath : @"/theos"]) {
+	if (!installedTheos && !installedVarTheos) {
 		previousInstall = NO;
-		[self RunCMD : @"echo \"git clone --recursive https://github.com/theos/theos.git /theos\" | GaPp" WaitUntilExit: YES] ;
-		if ([fileManager fileExistsAtPath : @"/theos"]) {
+		runCode = [NSString stringWithFormat:@"echo \"git clone --recursive https://github.com/theos/theos.git %@\" | GaPp", installHere];
+		[self RunCMD:runCode WaitUntilExit: YES] ;
+		if ([fileManager fileExistsAtPath : installHere]) {
 			installSuccess = YES;
-		}
-		else {
+		}else {
 			installSuccess = NO;
 			failed = YES;
 			return NO;
@@ -144,8 +145,12 @@ id CC(NSString *CMD) {
 }
 
 -(void)loader{
+	progName = @"Theos Auto Installer";
 	fileManager = NSFileManager.defaultManager;
+	installedTheos = [fileManager fileExistsAtPath : @"/theos"];
+	installedVarTheos = [fileManager fileExistsAtPath : @"/var/theos"];
 	preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.randy420.tai.plist"];
+	installHere = ([preferences objectForKey:@"Location"] ? [[preferences objectForKey:@"Location"] stringValue] : @"/var/theos");
 	enhance = ([preferences objectForKey:@"enhance"] ? [[preferences objectForKey:@"enhance"] boolValue] : NO);
 	all = ([preferences objectForKey:@"sdks-master"] ? [[preferences objectForKey:@"sdks-master"] boolValue] : NO);
 	nineThree = ([preferences objectForKey:@"9.3"] ? [[preferences objectForKey:@"9.3"] boolValue] : YES);
@@ -195,7 +200,13 @@ id CC(NSString *CMD) {
 		updated = [NSString stringWithFormat:@"[%sTheos is now Up-To-Date%s]\n", c_green, c_reset];
 		theosFailureMessage = [NSString stringWithFormat:@"[%sTheos install FAILED!%s]\n", c_red, c_reset];
 		theosSuccessMessage = [NSString stringWithFormat:@"[%sTheos installed To '/theos'%s]\n", c_green, c_reset];
-		previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '/theos'%s]\n", c_yellow, c_reset];
+		if (installedTheos && installedVarTheos){
+			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s' & '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_red, c_yellow, c_reset];
+		} else if (installedVarTheos){
+			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
+		} else {
+			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
+		}
 	} else {
 		successfulSdk = @"[Successfully downloaded SDKS]\n";
 		failedSdk = @"[Failed Downloading SDKS]\n";
@@ -206,10 +217,19 @@ id CC(NSString *CMD) {
 		tFolderIgnore = @"[tweaks folder already exists]\n";
 		updated = @"[Theos is now Up-To-Date]\n";
 		theosFailureMessage = @"[Theos install FAILED!]\n";
-		theosSuccessMessage = @"[Theos installed To '/theos']\n";
-		previousInstallMsg = @"[Theos previously installed to '/theos']\n";
+		if ([installHere isEqualToString:@"/theos"]) {
+			theosSuccessMessage = @"[Theos installed To '/theos']\n";
+		} else {
+			theosSuccessMessage = @"[Theos installed To '/var/theos']\n";
+		}
+		if (installedTheos && installedVarTheos){
+			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos' & '/var/theos']\n"];
+		} else if (installedVarTheos){
+			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/var/theos']\n"];
+		} else {
+			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos']\n"];
+		}
 	}
-	progName = @"Theos Auto Installer";
 	udidFail = [NSString stringWithFormat:@"[Your UDID Was NOT Accepted!]\nPlease pay for your version of %s.\n", [progName UTF8String]];
 	msg = @"";
 }
@@ -217,7 +237,8 @@ id CC(NSString *CMD) {
 -(bool)sdk:(NSString *)sdk Link:(NSString *)Link {
 	Loc = [NSString stringWithFormat:@"/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
 	if (![fileManager fileExistsAtPath: Loc]) {
-		[self RunCMD:[NSString stringWithFormat:@"echo \"curl -LO %s\" | GaPp;TMP=$(mktemp -d);echo \"unzip %s.zip -d $TMP\" | GaPp;echo \"mv $TMP/*.sdk /theos/sdks;echo\" | GaPp;echo \"rm -r %s.zip $TMP\" | GaPp", [Link UTF8String], [sdk UTF8String], [sdk UTF8String]] WaitUntilExit: YES];
+		runCode = [NSString stringWithFormat:@"echo \"curl -LO %s\" | GaPp;TMP=$(mktemp -d);echo \"unzip %s.zip -d $TMP\" | GaPp;echo \"mv $TMP/*.sdk %@/sdks;echo\" | GaPp;echo \"rm -r %s.zip $TMP\" | GaPp", [Link UTF8String], [sdk UTF8String], installHere, [sdk UTF8String]];
+		[self RunCMD:runCode WaitUntilExit: YES];
 		totalDownloaded += 1;
 		if ([fileManager fileExistsAtPath: Loc]) {
 			if (useColor) {
@@ -278,7 +299,8 @@ id CC(NSString *CMD) {
 -(void)enhancer{
 	if ([fileManager fileExistsAtPath:@"/theos"]){
 		if (enhance){
-			[self RunCMD:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | GaPp;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | GaPp;echo \"mv $TMP/include/* /theos/include\" | GaPp;echo \"mv $TMP/lib/* /theos/lib\" | GaPp;echo \"mv $TMP/templates/* /theos/templates\" | GaPp;echo \"mv $TMP/vendor/* /theos/vendor\" | GaPp;echo;echo \"rm -r includes.zip $TMP\" | GaPp;" WaitUntilExit: YES];
+			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | GaPp;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | GaPp;echo \"mv $TMP/include/* /theos/include\" | GaPp;echo \"mv $TMP/lib/* %@/lib\" | GaPp;echo \"mv $TMP/templates/* %@/templates\" | GaPp;echo \"mv $TMP/vendor/* %@/vendor\" | GaPp;echo;echo \"rm -r includes.zip $TMP\" | GaPp;", installHere, installHere, installHere];
+			[self RunCMD:runCode WaitUntilExit: YES];
 		if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"])
 			enhanced = YES;
 		}
@@ -336,6 +358,47 @@ id CC(NSString *CMD) {
 	installSuccess ? [self addMsg:theosSuccessMessage] : 0;
 	if (!theosUpdate) {
 		if (!badUdid) {
+			if (!folderFailed && tweaksMade) {
+			   [self addMsg:tFolderSuc];
+			} else if (folderFailed && !tweaksMade) {
+				[self addMsg:tFolderFail];
+			} else if (!folderFailed && !tweaksMade) {
+			   [self addMsg:tFolderIgnore];
+			}
+		}
+	}
+	if (attempted && failed && (!(previousInstall && installSuccess))) {
+		[self addMsg:theosFailureMessage];
+	}
+	if (attempted && previousInstall){
+		[self addMsg:previousInstallMsg];
+	}
+
+	enhanced ? [self addMsg:enhanceMsg] : 0;
+
+	if (totalDownloaded >= 1){
+		[self addMsg:successfulSdk];
+	}
+	alreadyHas ? [self addMsg:ignored] : 0;
+	failure ? [self addMsg:failedSdk] : 0;
+
+	if (PoPuP) {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Installation Results" message: msg preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+		
+		}];
+		[alert addAction:action];
+		[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
+	} else {
+		printf("%s\n", [msg UTF8String]);
+	}
+}
+-(void)popup:(BOOL)letRun{
+	(badUdid && !letRun) ? [self addMsg:udidFail] : 0;
+	theosUpdate ? [self addMsg:updated] : 0;
+	installSuccess ? [self addMsg:theosSuccessMessage] : 0;
+	if (!theosUpdate) {
+		if (!badUdid || letRun) {
 			if (!folderFailed && tweaksMade) {
 			   [self addMsg:tFolderSuc];
 			} else if (folderFailed && !tweaksMade) {
