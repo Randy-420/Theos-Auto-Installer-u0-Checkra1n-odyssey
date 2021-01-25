@@ -18,11 +18,8 @@
 -(void)DoWnLoAd;
 -(void)upDateTheos;
 -(void)enhancer;
--(int)Decrypt:(NSString *)uKey;
--(BOOL)udidCheck:(NSString *)crypt0 prefPLIsT:(NSString *)prefPLIsT path:(NSString *)path;
 -(void)addMsg:(NSString *)mSg;
 -(void)popup;
--(void)popup:(BOOL)letRun;
 @end
 
 // NSTask.h

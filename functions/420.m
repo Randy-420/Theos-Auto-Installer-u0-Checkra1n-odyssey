@@ -68,47 +68,41 @@ id CC(NSString *CMD) {
        return outputString;
     
 }
--(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit {
-    
-    
-    if (WaitUntilExit) {
-        
-        NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
+-(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit { 
+	if (WaitUntilExit) {
+		NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
 
-        NSTask *task = [[NSTask alloc] init];
-        NSMutableArray *args = [NSMutableArray array];
-        [args addObject:@"-c"];
-        [args addObject:SSHGetFlex];
-        [task setLaunchPath:@"/bin/sh"];
-        [task setArguments:args];
-        [task launch];
-        [task waitUntilExit];
-        
-    } else {
-    
-    
-    NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
+		NSTask *task = [[NSTask alloc] init];
+		NSMutableArray *args = [NSMutableArray array];
+		
+		[args addObject:@"-c"];
+		[args addObject:SSHGetFlex];
 
-    NSTask *task = [[NSTask alloc] init];
-    NSMutableArray *args = [NSMutableArray array];
-    [args addObject:@"-c"];
-    [args addObject:SSHGetFlex];
-    [task setLaunchPath:@"/bin/sh"];
-    [task setArguments:args];
-    [task launch];
-        
-    }
-    
-    
+		[task setLaunchPath:@"/bin/sh"];
+		[task setArguments:args];
+		[task launch];
+		[task waitUntilExit];
+	} else {
+		NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
+
+		NSTask *task = [[NSTask alloc] init];
+		NSMutableArray *args = [NSMutableArray array];
+
+		[args addObject:@"-c"];
+		[args addObject:SSHGetFlex];
+
+		[task setLaunchPath:@"/bin/sh"];
+		[task setArguments:args];
+		[task launch];       
+	}
 }
 
 -(void) RunCMD:(NSString *)RunCMD {
-    
-    NSString *CMDFormater = [NSString stringWithFormat:@"%@",RunCMD];
-    const char *Run = [CMDFormater UTF8String];
-    Run_CMDDER(Run);
-        
+	NSString *CMDFormater = [NSString stringWithFormat:@"%@",RunCMD];
+	const char *Run = [CMDFormater UTF8String];
+	Run_CMDDER(Run);
 }
+
 -(void)makeTweaksFolder {
 	if (![fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
 		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | GaPp"];
@@ -132,16 +126,16 @@ id CC(NSString *CMD) {
 		[self RunCMD:runCode WaitUntilExit: YES] ;
 		if ([fileManager fileExistsAtPath : installHere]) {
 			installSuccess = YES;
+			return YES;
 		}else {
 			installSuccess = NO;
 			failed = YES;
-			return NO;
 		}
 	}
 	else {
 		previousInstall = YES;
 	}
-	return YES;
+	return NO;
 }
 
 -(void)loader{
@@ -162,18 +156,7 @@ id CC(NSString *CMD) {
 	thirteenFour = ([preferences objectForKey:@"13.4"] ? [[preferences objectForKey:@"13.4"] boolValue] : NO);
 	thirteenFive = ([preferences objectForKey:@"13.5"] ? [[preferences objectForKey:@"13.5"] boolValue] : YES);
 	fourteen = ([preferences objectForKey:@"14.0"] ? [[preferences objectForKey:@"14.0"] boolValue] : NO);
-/*	[preferences registerBool:&enhance default:NO forKey:@"enhance"];
-	[preferences registerBool:&all default:NO forKey:@"sdks-master"];
-	[preferences registerBool:&nineThree default:YES forKey:@"9.3"];
-	[preferences registerBool:&tenThree default:NO forKey:@"10.3"];
-	[preferences registerBool:&elevenTwo default:NO forKey:@"11.2"];
-	[preferences registerBool:&twelveOneTwo default:NO forKey:@"12.1.2"];
-	[preferences registerBool:&twelveFour default:YES forKey:@"12.4"];
-	[preferences registerBool:&thirteen default:NO forKey:@"13.0"];
-	[preferences registerBool:&thirteenFour default:NO forKey:@"13.4"];
-	[preferences registerBool:&thirteenFive default:YES forKey:@"13.5"];*/
 
-	badUdid = NO;
 	tweaksMade = NO;
 	folderFailed = NO;
 	enhanced = NO;
@@ -185,7 +168,6 @@ id CC(NSString *CMD) {
 	attempted = NO;
 	failed = NO;
 	PoPuP = YES;
-	saveUDIDOnDecline = YES;
 
 	totalDownloaded = 0;
 
@@ -230,28 +212,29 @@ id CC(NSString *CMD) {
 			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos']\n"];
 		}
 	}
-	udidFail = [NSString stringWithFormat:@"[Your UDID Was NOT Accepted!]\nPlease pay for your version of %s.\n", [progName UTF8String]];
 	msg = @"";
 }
 
 -(bool)sdk:(NSString *)sdk Link:(NSString *)Link {
 	Loc = [NSString stringWithFormat:@"/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
-	if (![fileManager fileExistsAtPath: Loc]) {
-		runCode = [NSString stringWithFormat:@"echo \"curl -LO %s\" | GaPp;TMP=$(mktemp -d);echo \"unzip %s.zip -d $TMP\" | GaPp;echo \"mv $TMP/*.sdk %@/sdks;echo\" | GaPp;echo \"rm -r %s.zip $TMP\" | GaPp", [Link UTF8String], [sdk UTF8String], installHere, [sdk UTF8String]];
+	Loc1 = [NSString stringWithFormat:@"/var/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
+	if (![fileManager fileExistsAtPath: Loc] && ![fileManager fileExistsAtPath: Loc1]) {
+		runCode = [NSString stringWithFormat:@"echo \"curl -LO %@\" | GaPp;TMP=$(mktemp -d);echo \"unzip %@.zip -d $TMP\" | GaPp;echo \"mv $TMP/*.sdk %@/sdks;echo\" | GaPp;echo \"rm -r %@.zip $TMP\" | GaPp", Link, sdk, installHere, sdk];
 		[self RunCMD:runCode WaitUntilExit: YES];
 		totalDownloaded += 1;
+		Loc = [NSString stringWithFormat:@"%@/sdks/iPhoneOS%@.sdk", installHere, sdk];
 		if ([fileManager fileExistsAtPath: Loc]) {
 			if (useColor) {
-				successfulSdk = [NSString stringWithFormat:@"%s%siPhoneOS %s SDK%s\n", [successfulSdk UTF8String], c_green, [sdk UTF8String], c_reset];
+				successfulSdk = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", successfulSdk, c_green, sdk, c_reset];
 			} else {
-				successfulSdk = [NSString stringWithFormat:@"%siPhoneOS %s SDK\n", [successfulSdk UTF8String], [sdk UTF8String]];
+				successfulSdk = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", successfulSdk, sdk];
 			}
 			return (YES);
 		} else {
 			if (useColor) {
-				failedSdk = [NSString stringWithFormat:@"%s%siPhoneOS %s SDK%s\n", [failedSdk UTF8String], c_red, [sdk UTF8String], c_reset];
+				failedSdk = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", failedSdk, c_red, sdk, c_reset];
 			} else {
-				failedSdk = [NSString stringWithFormat:@"%siPhoneOS %s SDK\n", [failedSdk UTF8String], [sdk UTF8String]];
+				failedSdk = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", failedSdk, sdk];
 			}
 			failure = YES;
 			return (NO);
@@ -259,9 +242,9 @@ id CC(NSString *CMD) {
 	} else {
 		alreadyHas = YES;
 		if (useColor) {
-			ignored = [NSString stringWithFormat:@"%s%siPhoneOS %s SDK%s\n", [ignored UTF8String], c_yellow, [sdk UTF8String], c_reset];
+			ignored = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset];
 		} else {
-			ignored = [NSString stringWithFormat:@"%siPhoneOS %s SDK\n", [ignored UTF8String], [sdk UTF8String]];
+			ignored = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", ignored, sdk];
 		}
 	}
 	return (YES);
@@ -297,55 +280,15 @@ id CC(NSString *CMD) {
 }
 
 -(void)enhancer{
-	if ([fileManager fileExistsAtPath:@"/theos"]){
+	if (installedTheos || installedVarTheos) {
 		if (enhance){
 			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | GaPp;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | GaPp;echo \"mv $TMP/include/* /theos/include\" | GaPp;echo \"mv $TMP/lib/* %@/lib\" | GaPp;echo \"mv $TMP/templates/* %@/templates\" | GaPp;echo \"mv $TMP/vendor/* %@/vendor\" | GaPp;echo;echo \"rm -r includes.zip $TMP\" | GaPp;", installHere, installHere, installHere];
 			[self RunCMD:runCode WaitUntilExit: YES];
-		if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"])
-			enhanced = YES;
-		}
-	}
-}
-
--(int)Decrypt:(NSString *)uKey{key = [NSString stringWithFormat:@"%@", uKey];hashedKey = [CRYPT0 bddbeh7xeub7edshs:key dbddhex7buh7dchhs:db7bbhbchex7hb7sh256];decrypt = [current bdbdbehxuebe7bshs:nil key:hashedKey];return 1;}
-
--(BOOL)udidCheck:(NSString *)crypt0 prefPLIsT:(NSString *)prefPLIsT path:(NSString *)path {
-	udidDevice = [NSString stringWithFormat:@"%@",[[UIDevice currentDevice] _deviceInfoForKey:@"UniqueDeviceID"]];
-	current = [preferences objectForKey:@"activationKey"];
-	if (current != nil && current != NULL && ![current isEqual: @""]) {
-		[self Decrypt:crypt0];
-		if ([udidDevice isEqualToString:decrypt]){
-			return YES;
-		}
-	}
-	NSDictionary *file = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:path]];
-	NSDictionary *currentPlistV;
-	NSArray *allKeys = file[@"keys"];
-	unsigned long allKeysCount = allKeys.count;
-	for (unsigned int choose = 0; choose < allKeysCount; choose++) {
-		currentPlistV = allKeys[choose];
-		current = [NSString stringWithFormat: @"%s", [currentPlistV[@"accepted"] UTF8String]];
-		if (current != nil && current != NULL && ![current isEqual: @""]) {
-			[self Decrypt:[NSString stringWithFormat:@"%@", crypt0]];
-			if ([udidDevice isEqualToString:decrypt]){
-				//[Prefs setObject:current forKey:@"activationKey"];
-				[preferences setObject:current forKey: @"activationKey"];
-
-
-				//[preferences writeToFile:@"/var/mobile/Library/Preferences/com.randy420.tai.plist" automically:YES];
-				
-				
-				return YES;
+			if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fileManager fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]){
+				enhanced = YES;
 			}
 		}
 	}
-	if (saveUDIDOnDecline) {
-		FILE *hideLog = freopen("/dev/null", "w", stderr);
-		UIPasteboard.generalPasteboard.string = udidDevice;
-		fclose(hideLog);
-	}
-	badUdid = YES;
-	return NO;
 }
 
 -(void)addMsg: (NSString *)mSg{
@@ -353,18 +296,15 @@ id CC(NSString *CMD) {
 }
 
 -(void)popup{
-	badUdid ? [self addMsg:udidFail] : 0;
 	theosUpdate ? [self addMsg:updated] : 0;
 	installSuccess ? [self addMsg:theosSuccessMessage] : 0;
 	if (!theosUpdate) {
-		if (!badUdid) {
-			if (!folderFailed && tweaksMade) {
+		if (!folderFailed && tweaksMade) {
 			   [self addMsg:tFolderSuc];
-			} else if (folderFailed && !tweaksMade) {
-				[self addMsg:tFolderFail];
-			} else if (!folderFailed && !tweaksMade) {
-			   [self addMsg:tFolderIgnore];
-			}
+		} else if (folderFailed && !tweaksMade) {
+			[self addMsg:tFolderFail];
+		} else if (!folderFailed && !tweaksMade) {
+		   [self addMsg:tFolderIgnore];
 		}
 	}
 	if (attempted && failed && (!(previousInstall && installSuccess))) {
@@ -390,48 +330,7 @@ id CC(NSString *CMD) {
 		[alert addAction:action];
 		[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
 	} else {
-		printf("%s\n", [msg UTF8String]);
-	}
-}
--(void)popup:(BOOL)letRun{
-	(badUdid && !letRun) ? [self addMsg:udidFail] : 0;
-	theosUpdate ? [self addMsg:updated] : 0;
-	installSuccess ? [self addMsg:theosSuccessMessage] : 0;
-	if (!theosUpdate) {
-		if (!badUdid || letRun) {
-			if (!folderFailed && tweaksMade) {
-			   [self addMsg:tFolderSuc];
-			} else if (folderFailed && !tweaksMade) {
-				[self addMsg:tFolderFail];
-			} else if (!folderFailed && !tweaksMade) {
-			   [self addMsg:tFolderIgnore];
-			}
-		}
-	}
-	if (attempted && failed && (!(previousInstall && installSuccess))) {
-		[self addMsg:theosFailureMessage];
-	}
-	if (attempted && previousInstall){
-		[self addMsg:previousInstallMsg];
-	}
-
-	enhanced ? [self addMsg:enhanceMsg] : 0;
-
-	if (totalDownloaded >= 1){
-		[self addMsg:successfulSdk];
-	}
-	alreadyHas ? [self addMsg:ignored] : 0;
-	failure ? [self addMsg:failedSdk] : 0;
-
-	if (PoPuP) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Installation Results" message: msg preferredStyle:UIAlertControllerStyleAlert];
-		UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-		
-		}];
-		[alert addAction:action];
-		[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
-	} else {
-		printf("%s\n", [msg UTF8String]);
+		NSLog(@"%@\n", msg);
 	}
 }
 @end

@@ -1,6 +1,6 @@
-#include "taiprefs/functions/420.h"
-#include "taiprefs/functions/.profile.h"
-#include "taiprefs/functions/.zprofile.h"
+#include "functions/420.h"
+#include "functions/.profile.h"
+#include "functions/.zprofile.h"
 
 tai *TAI;
 @interface taiPriv : NSObject
@@ -19,7 +19,7 @@ tai *TAI;
 }
 -(BOOL)dTheos: (BOOL)dTheos {
 	if (dTheos) {
-		if ([fileManager removeItemAtPath:@"/theos" error:nil]) {
+		if ([fileManager removeItemAtPath:@"/theos" error:nil] || [fileManager removeItemAtPath:@"/var/theos" error:nil]) {
 			printf("%sTheos %suninstalled %sSuccessfully!%s\n", c_cyan, c_red, c_cyan, c_reset);
 		} else {
 			printf("%sUnable to uninstall %sTheos%s\n", c_red, c_cyan, c_reset);
