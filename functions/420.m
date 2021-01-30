@@ -144,7 +144,7 @@ id CC(NSString *CMD) {
 	installedTheos = [fileManager fileExistsAtPath : @"/theos"];
 	installedVarTheos = [fileManager fileExistsAtPath : @"/var/theos"];
 	preferences = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.randy420.tai.plist"];
-	installHere = ([preferences objectForKey:@"Location"] ? [[preferences objectForKey:@"Location"] stringValue] : @"/var/theos");
+	installHere = ([preferences objectForKey:@"Location"] ? [preferences objectForKey:@"Location"] : @"/var/theos");
 	enhance = ([preferences objectForKey:@"enhance"] ? [[preferences objectForKey:@"enhance"] boolValue] : NO);
 	all = ([preferences objectForKey:@"sdks-master"] ? [[preferences objectForKey:@"sdks-master"] boolValue] : NO);
 	nineThree = ([preferences objectForKey:@"9.3"] ? [[preferences objectForKey:@"9.3"] boolValue] : YES);
@@ -173,7 +173,7 @@ id CC(NSString *CMD) {
 
 	if (useColor) {
 		successfulSdk = [NSString stringWithFormat:@"[%sSuccessfully downloaded SDKS%s]\n", c_green, c_reset];
-		failedSdk = [NSString stringWithFormat:@"[%sFailed Downloading SDKS%s]\n", c_red, c_reset];
+		failedSdk = [NSString stringWithFormat:@"[%sFailed Installing SDKS%s]\n", c_red, c_reset];
 		enhanceMsg = [NSString stringWithFormat:@"[%sDev Tools Installed%s]\n", c_green, c_reset];
 		ignored = [NSString stringWithFormat:@"[%sPreviously installed SDKS%s]\n", c_yellow, c_reset];
 		tFolderSuc = [NSString stringWithFormat:@"[%sTweaks folder created successfully%s]\n", c_green, c_reset];
@@ -181,7 +181,8 @@ id CC(NSString *CMD) {
 		tFolderIgnore = [NSString stringWithFormat:@"[%stweaks folder already exists%s]\n", c_yellow, c_reset];
 		updated = [NSString stringWithFormat:@"[%sTheos is now Up-To-Date%s]\n", c_green, c_reset];
 		theosFailureMessage = [NSString stringWithFormat:@"[%sTheos install FAILED!%s]\n", c_red, c_reset];
-		theosSuccessMessage = [NSString stringWithFormat:@"[%sTheos installed To '/theos'%s]\n", c_green, c_reset];
+		theosSuccessMessage = [NSString stringWithFormat:@"[%sTheos installed To '%@'%s]\n", c_green, installHere, c_reset];
+		checkInstall = [NSString stringWithFormat:@"[%s!!%sMAKE SURE THE INSTALL LOCATION IS RIGHT IN SETTINGS%s!!%s]\n", c_cyan, c_red, c_cyan, c_reset];
 		if (installedTheos && installedVarTheos){
 			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s' & '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_red, c_yellow, c_reset];
 		} else if (installedVarTheos){
@@ -191,19 +192,16 @@ id CC(NSString *CMD) {
 		}
 	} else {
 		successfulSdk = @"[Successfully downloaded SDKS]\n";
-		failedSdk = @"[Failed Downloading SDKS]\n";
+		failedSdk = @"[Failed Installing SDKS]\n";
 		enhanceMsg = @"[Dev Tools Installed]\n";
+		checkInstall = @"[!!MAKE SURE THE INSTALL LOCATION IS RIGHT IN SETTINGS!!]\n";
 		ignored = @"[Ignored Previously Installed SDKS]\n";
 		tFolderSuc = @"[Tweaks folder created successfully]\n";
 		tFolderFail = @"[Failed to make /var/mobile/tweaks]\n";
 		tFolderIgnore = @"[tweaks folder already exists]\n";
 		updated = @"[Theos is now Up-To-Date]\n";
 		theosFailureMessage = @"[Theos install FAILED!]\n";
-		if ([installHere isEqualToString:@"/theos"]) {
-			theosSuccessMessage = @"[Theos installed To '/theos']\n";
-		} else {
-			theosSuccessMessage = @"[Theos installed To '/var/theos']\n";
-		}
+			theosSuccessMessage = [NSString stringWithFormat:@"[Theos installed To '%@']\n", installHere];
 		if (installedTheos && installedVarTheos){
 			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos' & '/var/theos']\n"];
 		} else if (installedVarTheos){
@@ -225,16 +223,16 @@ id CC(NSString *CMD) {
 		Loc = [NSString stringWithFormat:@"%@/sdks/iPhoneOS%@.sdk", installHere, sdk];
 		if ([fileManager fileExistsAtPath: Loc]) {
 			if (useColor) {
-				successfulSdk = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", successfulSdk, c_green, sdk, c_reset];
+				successfulSdk = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", successfulSdk, c_green, sdk, c_reset];
 			} else {
-				successfulSdk = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", successfulSdk, sdk];
+				successfulSdk = [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", successfulSdk, sdk];
 			}
 			return (YES);
 		} else {
 			if (useColor) {
-				failedSdk = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", failedSdk, c_red, sdk, c_reset];
+				failedSdk = [NSString stringWithFormat:@"%@ ~%siPhoneOS %@ SDK%s\n", failedSdk, c_red, sdk, c_reset];
 			} else {
-				failedSdk = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", failedSdk, sdk];
+				failedSdk = [NSString stringWithFormat:@"~%@iPhoneOS %@ SDK\n", failedSdk, sdk];
 			}
 			failure = YES;
 			return (NO);
@@ -242,9 +240,9 @@ id CC(NSString *CMD) {
 	} else {
 		alreadyHas = YES;
 		if (useColor) {
-			ignored = [NSString stringWithFormat:@"%@%siPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset];
+			ignored = [NSString stringWithFormat:@"~%@%siPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset];
 		} else {
-			ignored = [NSString stringWithFormat:@"%@iPhoneOS %@ SDK\n", ignored, sdk];
+			ignored = [NSString stringWithFormat:@" ~%@iPhoneOS %@ SDK\n", ignored, sdk];
 		}
 	}
 	return (YES);
@@ -280,13 +278,13 @@ id CC(NSString *CMD) {
 }
 
 -(void)enhancer{
-	if (installedTheos || installedVarTheos) {
-		if (enhance){
+	if (enhance){
+		if ([fileManager fileExistsAtPath:installHere]) {
 			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | GaPp;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | GaPp;echo \"mv $TMP/include/* /theos/include\" | GaPp;echo \"mv $TMP/lib/* %@/lib\" | GaPp;echo \"mv $TMP/templates/* %@/templates\" | GaPp;echo \"mv $TMP/vendor/* %@/vendor\" | GaPp;echo;echo \"rm -r includes.zip $TMP\" | GaPp;", installHere, installHere, installHere];
 			[self RunCMD:runCode WaitUntilExit: YES];
-			if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fileManager fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]){
-				enhanced = YES;
-			}
+		}
+		if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fileManager fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]){
+			enhanced = YES;
 		}
 	}
 }
@@ -320,7 +318,11 @@ id CC(NSString *CMD) {
 		[self addMsg:successfulSdk];
 	}
 	alreadyHas ? [self addMsg:ignored] : 0;
-	failure ? [self addMsg:failedSdk] : 0;
+
+	if (failure) {
+		[self addMsg:failedSdk];
+		[self addMsg:checkInstall];
+	}
 
 	if (PoPuP) {
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Installation Results" message: msg preferredStyle:UIAlertControllerStyleAlert];
@@ -330,7 +332,7 @@ id CC(NSString *CMD) {
 		[alert addAction:action];
 		[[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
 	} else {
-		NSLog(@"%@\n", msg);
+		printf("\n\n%s\n", [msg UTF8String]);
 	}
 }
 @end
