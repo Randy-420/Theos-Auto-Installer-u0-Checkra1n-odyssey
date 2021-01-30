@@ -7,66 +7,64 @@ extern char **environ;
 void Run_CMDDER(const char *cmd) {
 	pid_t pid;
 	const char *argv[] = {"sh", "-c", cmd, NULL};
-    
+
 	int status;
-    
+
 	status = posix_spawn(&pid, "/bin/sh", NULL, NULL, (char* const*)argv, environ);
-    
+
 	if (status == 0) {
 		if (waitpid(pid, &status, 0) != -1) {
-            
+
 		} else {
 			perror("waitpid");
 		}
 	} else {
 
-	}   
+	} 
 }
 @implementation tai
 id CC(NSString *CMD) {
-
-    return [NSString stringWithFormat:@"echo \"%@\" | GaPp",CMD];
+	return [NSString stringWithFormat:@"echo \"%@\" | GaPp",CMD];
 }
 
 -(void) RunRoot:(NSString *)RunRoot WaitUntilExit:(BOOL)WaitUntilExit {
-          NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
-    
-          NSTask *task = [[NSTask alloc] init];
-          NSMutableArray *args = [NSMutableArray array];
-          [args addObject:@"-c"];
-          [args addObject:RunCC];
-          [task setLaunchPath:@"/bin/sh"];
-          [task setArguments:args];
-          [task launch];
-         
-          if (WaitUntilExit)
-          [task waitUntilExit];
-    
+	NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
+
+	NSTask *task = [[NSTask alloc] init];
+	NSMutableArray *args = [NSMutableArray array];
+
+	[args addObject:@"-c"];
+	[args addObject:RunCC];
+	[task setLaunchPath:@"/bin/sh"];
+	[task setArguments:args];
+	[task launch];
+ 
+	if (WaitUntilExit)
+		[task waitUntilExit];
+
 }
 
 -(NSString *) RunRoot:(NSString *)RunRoot {
-    
-          NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
-           
-           
-          NSTask *task = [[NSTask alloc] init];
-          NSMutableArray *args = [NSMutableArray array];
-          [args addObject:@"-c"];
-          [args addObject:RunCC];
-          [task setLaunchPath:@"/bin/sh"];
-          [task setArguments:args];
-          NSPipe *outputPipe = [NSPipe pipe];
-          [task setStandardInput:[NSPipe pipe]];
-          [task setStandardOutput:outputPipe];
-          [task launch];
-          [task waitUntilExit];
+	NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
+	NSTask *task = [[NSTask alloc] init];
+	NSMutableArray *args = [NSMutableArray array];
 
+	[args addObject:@"-c"];
+	[args addObject:RunCC];
+	[task setLaunchPath:@"/bin/sh"];
+	[task setArguments:args];
 
-    NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
-    NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
-       
-       return outputString;
-    
+	NSPipe *outputPipe = [NSPipe pipe];
+
+	[task setStandardInput:[NSPipe pipe]];
+	[task setStandardOutput:outputPipe];
+	[task launch];
+	[task waitUntilExit];
+
+	NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
+	NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
+ 
+	return outputString; 
 }
 -(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit { 
 	if (WaitUntilExit) {
@@ -93,7 +91,7 @@ id CC(NSString *CMD) {
 
 		[task setLaunchPath:@"/bin/sh"];
 		[task setArguments:args];
-		[task launch];       
+		[task launch]; 
 	}
 }
 
@@ -106,7 +104,7 @@ id CC(NSString *CMD) {
 -(void)makeTweaksFolder {
 	if (![fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
 		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | GaPp"];
-		[self RunCMD:runCode  WaitUntilExit: YES] ;
+		[self RunCMD:runCode WaitUntilExit: YES] ;
 		if ([fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
 			tweaksMade = YES;
 			folderFailed = NO;
@@ -139,7 +137,7 @@ id CC(NSString *CMD) {
 }
 
 -(void)loader{
-	progName = @"Theos Auto Installer";
+	progName = @"Theos Auto nnInstaller";
 	fileManager = NSFileManager.defaultManager;
 	installedTheos = [fileManager fileExistsAtPath : @"/theos"];
 	installedVarTheos = [fileManager fileExistsAtPath : @"/var/theos"];
@@ -201,7 +199,7 @@ id CC(NSString *CMD) {
 		tFolderIgnore = @"[tweaks folder already exists]\n";
 		updated = @"[Theos is now Up-To-Date]\n";
 		theosFailureMessage = @"[Theos install FAILED!]\n";
-			theosSuccessMessage = [NSString stringWithFormat:@"[Theos installed To '%@']\n", installHere];
+		theosSuccessMessage = [NSString stringWithFormat:@"[Theos installed To '%@']\n", installHere];
 		if (installedTheos && installedVarTheos){
 			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos' & '/var/theos']\n"];
 		} else if (installedVarTheos){
@@ -298,11 +296,11 @@ id CC(NSString *CMD) {
 	installSuccess ? [self addMsg:theosSuccessMessage] : 0;
 	if (!theosUpdate) {
 		if (!folderFailed && tweaksMade) {
-			   [self addMsg:tFolderSuc];
+			 [self addMsg:tFolderSuc];
 		} else if (folderFailed && !tweaksMade) {
 			[self addMsg:tFolderFail];
 		} else if (!folderFailed && !tweaksMade) {
-		   [self addMsg:tFolderIgnore];
+		 [self addMsg:tFolderIgnore];
 		}
 	}
 	if (attempted && failed && (!(previousInstall && installSuccess))) {
