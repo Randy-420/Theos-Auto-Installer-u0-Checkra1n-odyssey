@@ -4,68 +4,7 @@
 #define _POSIX_SPAWN_ALLOW_DATA_EXEC 0x2000
 extern char **environ;
 
-void Run_CMDDER(const char *cmd) {
-	pid_t pid;
-	const char *argv[] = {"sh", "-c", cmd, NULL};
-
-	int status;
-
-	status = posix_spawn(&pid, "/bin/sh", NULL, NULL, (char* const*)argv, environ);
-
-	if (status == 0) {
-		if (waitpid(pid, &status, 0) != -1) {
-
-		} else {
-			perror("waitpid");
-		}
-	} else {
-
-	} 
-}
 @implementation tai
-id CC(NSString *CMD) {
-	return [NSString stringWithFormat:@"echo \"%@\" | GaPp",CMD];
-}
-
--(void) RunRoot:(NSString *)RunRoot WaitUntilExit:(BOOL)WaitUntilExit {
-	NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
-
-	NSTask *task = [[NSTask alloc] init];
-	NSMutableArray *args = [NSMutableArray array];
-
-	[args addObject:@"-c"];
-	[args addObject:RunCC];
-	[task setLaunchPath:@"/bin/sh"];
-	[task setArguments:args];
-	[task launch];
- 
-	if (WaitUntilExit)
-		[task waitUntilExit];
-
-}
-
--(NSString *) RunRoot:(NSString *)RunRoot {
-	NSString *RunCC = [NSString stringWithFormat:@"%@",CC(RunRoot)];
-	NSTask *task = [[NSTask alloc] init];
-	NSMutableArray *args = [NSMutableArray array];
-
-	[args addObject:@"-c"];
-	[args addObject:RunCC];
-	[task setLaunchPath:@"/bin/sh"];
-	[task setArguments:args];
-
-	NSPipe *outputPipe = [NSPipe pipe];
-
-	[task setStandardInput:[NSPipe pipe]];
-	[task setStandardOutput:outputPipe];
-	[task launch];
-	[task waitUntilExit];
-
-	NSData *outputData = [[outputPipe fileHandleForReading] readDataToEndOfFile];
-	NSString *outputString = [[NSString alloc] initWithData:outputData encoding:NSUTF8StringEncoding];
- 
-	return outputString; 
-}
 -(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit { 
 	if (WaitUntilExit) {
 		NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
@@ -95,16 +34,10 @@ id CC(NSString *CMD) {
 	}
 }
 
--(void) RunCMD:(NSString *)RunCMD {
-	NSString *CMDFormater = [NSString stringWithFormat:@"%@",RunCMD];
-	const char *Run = [CMDFormater UTF8String];
-	Run_CMDDER(Run);
-}
-
 -(void)makeTweaksFolder {
 	if (![fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
-		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | GaPp"];
-		[self RunCMD:runCode WaitUntilExit: YES] ;
+		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | gap"];
+		[self RunCMD:runCode WaitUntilExit: YES];
 		if ([fileManager fileExistsAtPath : @"/var/mobile/tweaks"]) {
 			tweaksMade = YES;
 			folderFailed = NO;
@@ -120,8 +53,8 @@ id CC(NSString *CMD) {
 	attempted = YES;
 	if (!installedTheos && !installedVarTheos) {
 		previousInstall = NO;
-		runCode = [NSString stringWithFormat:@"echo \"git clone --recursive https://github.com/theos/theos.git %@\" | GaPp", installHere];
-		[self RunCMD:runCode WaitUntilExit: YES] ;
+		runCode = [NSString stringWithFormat:@"echo \"git clone --recursive https://github.com/theos/theos.git %@\" | gap", installHere];
+		[self RunCMD:runCode WaitUntilExit: YES];
 		if ([fileManager fileExistsAtPath : installHere]) {
 			installSuccess = YES;
 			return YES;
@@ -215,7 +148,7 @@ id CC(NSString *CMD) {
 	Loc = [NSString stringWithFormat:@"/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
 	Loc1 = [NSString stringWithFormat:@"/var/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
 	if (![fileManager fileExistsAtPath: Loc] && ![fileManager fileExistsAtPath: Loc1]) {
-		runCode = [NSString stringWithFormat:@"echo \"curl -LO %@\" | GaPp;TMP=$(mktemp -d);echo \"unzip %@.zip -d $TMP\" | GaPp;echo \"mv $TMP/*.sdk %@/sdks;echo\" | GaPp;echo \"rm -r %@.zip $TMP\" | GaPp", Link, sdk, installHere, sdk];
+		runCode = [NSString stringWithFormat:@"echo \"curl -LO %@\" | gap;TMP=$(mktemp -d);echo \"unzip %@.zip -d $TMP\" | gap;echo \"mv $TMP/*.sdk %@/sdks;echo\" | gap;echo \"rm -r %@.zip $TMP\" | gap", Link, sdk, installHere, sdk];
 		[self RunCMD:runCode WaitUntilExit: YES];
 		totalDownloaded += 1;
 		Loc = [NSString stringWithFormat:@"%@/sdks/iPhoneOS%@.sdk", installHere, sdk];
@@ -271,14 +204,14 @@ id CC(NSString *CMD) {
 }
 
 -(void)upDateTheos {
-	[self RunCMD: @"echo \"$THEOS/bin/update-theos\" | GaPp" WaitUntilExit: YES];
+	[self RunCMD: @"echo \"$THEOS/bin/update-theos\" | gap" WaitUntilExit: YES];
 	theosUpdate = YES;
 }
 
 -(void)enhancer{
 	if (enhance){
 		if ([fileManager fileExistsAtPath:installHere]) {
-			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | GaPp;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | GaPp;echo \"mv $TMP/include/* /theos/include\" | GaPp;echo \"mv $TMP/lib/* %@/lib\" | GaPp;echo \"mv $TMP/templates/* %@/templates\" | GaPp;echo \"mv $TMP/vendor/* %@/vendor\" | GaPp;echo;echo \"rm -r includes.zip $TMP\" | GaPp;", installHere, installHere, installHere];
+			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | gap;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | gap;echo \"mv $TMP/include/* /theos/include\" | gap;echo \"mv $TMP/lib/* %@/lib\" | gap;echo \"mv $TMP/templates/* %@/templates\" | gap;echo \"mv $TMP/vendor/* %@/vendor\" | gap;echo;echo \"rm -r includes.zip $TMP\" | gap;", installHere, installHere, installHere];
 			[self RunCMD:runCode WaitUntilExit: YES];
 		}
 		if ([fileManager fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fileManager fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]){

@@ -7,10 +7,7 @@
 @end
 
 @interface tai : NSObject
--(void) RunCMD:(NSString *)RunCMD;
 -(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit;
--(NSString *) RunRoot:(NSString *)RunRoot;
--(void) RunRoot:(NSString *)RunRoot WaitUntilExit:(BOOL)WaitUntilExit;
 -(void)makeTweaksFolder;
 -(BOOL)theosInstall;
 -(void)loader;
