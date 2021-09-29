@@ -26,6 +26,9 @@
 	NSString *dlLinK;
 	NSString *installHere;
 	NSString *checkInstall;
+	NSString *leaf;
+	NSMutableDictionary *preferences;
+	NSFileManager *fm;
 }
 
 /* ENHANCEMENTS */
@@ -66,7 +69,7 @@
 -(void) loader;
 -(bool) sdk:(NSString*)sdk Link:(NSString*)Link;
 -(void) DoWnLoAd;
--(void) upDateTheos;
+//-(void) upDateTheos;
 -(void) enhancer;
 -(void) addMsg:(NSString *)mSg;
 -(void) popup;

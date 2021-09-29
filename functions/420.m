@@ -34,7 +34,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 -(void)makeTweaksFolder {
-	NSFileManager *fm = [[NSFileManager alloc] init];
+
 
 	if (![fm fileExistsAtPath:@"/var/mobile/tweaks"]) {
 		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | gap"];
@@ -46,7 +46,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 -(BOOL)theosInstall {
-	NSFileManager *fm = [[NSFileManager alloc] init];
+
 	self.attempted = YES;
 	self.previousInstall = (self.installedTheos || self.installedVarTheos);
 
@@ -64,8 +64,12 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 -(void)loader{
-	NSFileManager *fm = NSFileManager.defaultManager;
+	fm = NSFileManager.defaultManager;
 
+	leaf = @"\n\n                     .                          \n                     M                          \n                    dM                          \n                    MMr                         \n                   4MMML                  .     \n                   MMMMM.                xf     \n   .              \"MMMMM               .MM-     \n    Mh..          +MMMMMM            .MMMM      \n    .MMM.         .MMMMML.          MMMMMh      \n     )MMMh.        MMMMMM         MMMMMMM       \n      3MMMMx.     \'MMMMMMf      xnMMMMMM\"       \n      \'*MMMMM      MMMMMM.     nMMMMMMP\"        \n        *MMMMMx    \"MMMMM\\    .MMMMMMM=         \n         *MMMMMh   \"MMMMM\"   JMMMMMMP           \n           MMMMMM   3MMMM.  dMMMMMM            .\n            MMMMMM  \"MMMM  .MMMMM(        .nnMP\"\n=..          *MMMMx  MMM\"  dMMMM\"    .nnMMMMM*  \n  \"MMn...     \'MMMMr \'MM   MMM\"   .nMMMMMMM*\"   \n   \"4MMMMnn..   *MMM  MM  MMP\"  .dMMMMMMM\"\"     \n     ^MMMMMMMMx.  *ML \"M .M*  .MMMMMM**\"        \n        *PMMMMMMhn. *x > M  .MMMM**\"\"           \n           \"\"**MMMMhx/.h/ .=*\"                  \n                    .3P\"%....";
+
+	leaf = [NSString stringWithFormat:@"%s%@%s\n", c_green, leaf, c_reset];
+		leaf = [NSString stringWithFormat:@"%@%s                   ~Randy420~\n%s\n", leaf, c_red, c_reset];
 	installHere = GetNSString(@"Location", @"/var/theos", @"com.randy420.tai");
 
 	self.enhance = GetBool(@"enhance", NO, @"com.randy420.tai");
@@ -98,6 +102,8 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	self.totalDownloaded = 0;
 
 	if (self.useColor) {
+		printf("%s\n\n", [leaf UTF8String]);
+		sleep(1);
 		successfulSdk = [NSString stringWithFormat:@"[%sSuccessfully downloaded SDKS%s]\n", c_green, c_reset];
 		failedSdk = [NSString stringWithFormat:@"[%sFailed Installing SDKS%s]\n", c_red, c_reset];
 		enhanceMsg = [NSString stringWithFormat:@"[%sDev Tools Installed%s]\n", c_green, c_reset];
@@ -140,7 +146,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 -(bool)sdk:(NSString *)sdk Link:(NSString *)Link {
-	NSFileManager *fm = [[NSFileManager alloc] init];
+
 	Loc = [NSString stringWithFormat:@"/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
 	Loc1 = [NSString stringWithFormat:@"/var/theos/sdks/iPhoneOS%s.sdk", [sdk UTF8String]];
 	if (!self.previousInstall) {
@@ -199,13 +205,13 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	self.fourteen ? [self sdk:@"14.0" Link:@"https://www.dropbox.com/s/ly8627ncpaiv6ji/14.0.zip"] : 0;
 }
 
--(void)upDateTheos {
+/*-(void)upDateTheos {
 	[self RunCMD: @"echo \"$THEOS/bin/update-theos\" | gap" WaitUntilExit: YES];
 	self.theosUpdate = YES;
-}
+}*/
 
 -(void)enhancer{
-	NSFileManager *fm = [[NSFileManager alloc] init];
+
 	if (self.enhance) {
 		if ([fm fileExistsAtPath:installHere]) {
 			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://www.dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | gap;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | gap;echo \"mv $TMP/include/* /theos/include\" | gap;echo \"mv $TMP/lib/* %@/lib\" | gap;echo \"mv $TMP/templates/* %@/templates\" | gap;echo \"mv $TMP/vendor/* %@/vendor\" | gap;echo;echo \"rm -r includes.zip $TMP\" | gap;", installHere, installHere, installHere];
@@ -217,11 +223,12 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	}
 }
 
--(void)addMsg: (NSString *)mSg{
-	msg = [NSString stringWithFormat:@"%@%@\n", msg, mSg];
+-(void)addMsg: (NSString *)addMsg{
+	msg = [NSString stringWithFormat:@"%@%@\n", msg, addMsg];
 }
 
 -(void)popup{
+	[self addMsg:leaf];
 		self.theosUpdate ? [self addMsg:updated] : 0;
 	self.installSuccess ? [self addMsg:theosSuccessMessage] : 0;
 	if (self.tweaksExists){
