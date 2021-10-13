@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 	"%stai%s [%soption%s]%s\n"
 	"-u%s Uninstall Theos.%s\n"
 	"-r%s Reinstall Theos.%s\n"
-	"-s%s Installenhanced dev tools & SDK files only.(requires theos to be installed already in location '/theos').\n%s", c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_magenta, c_cyan, c_magenta, c_red, c_cyan, c_reset];
+	"-s%s Installenhanced dev tools & SDK files only.(requires theos to be installed already in location '/theos' or '/var/theos).\n%s", c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_magenta, c_cyan, c_magenta, c_red, c_cyan, c_reset];
 ///////////////////////////////////////
 ////          Options              ////
 ///////////////////////////////////////
