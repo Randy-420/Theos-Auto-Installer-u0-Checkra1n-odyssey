@@ -36,10 +36,9 @@ tai *TAI;
 ///////////////////////////////////////
 ////       Admin Handling          ////
 ///////////////////////////////////////
-	printf("\t\t%sT%sheos %sA%suto %sI%snstaller%s by%s Randy420\n%s\n\n", c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_reset, c_magenta, c_reset);
-	[self checkTerm];
 	TAI.useColor = YES;
 	[TAI loader];
+	[self checkTerm];
 }
 @end
 

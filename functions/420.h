@@ -35,15 +35,28 @@
 @property (nonatomic, assign) BOOL enhance;
 /* SDKS */
 @property (nonatomic, assign) BOOL all;
+@property (nonatomic, assign) BOOL eightFour;
 @property (nonatomic, assign) BOOL nineThree;
+@property (nonatomic, assign) BOOL ten;
 @property (nonatomic, assign) BOOL tenThree;
+@property (nonatomic, assign) BOOL eleven;
+@property (nonatomic, assign) BOOL elevenOne;
 @property (nonatomic, assign) BOOL elevenTwo;
+@property (nonatomic, assign) BOOL elevenThree;
+@property (nonatomic, assign) BOOL elevenFour;
 @property (nonatomic, assign) BOOL twelveOneTwo;
+@property (nonatomic, assign) BOOL twelveTwo;
 @property (nonatomic, assign) BOOL twelveFour;
 @property (nonatomic, assign) BOOL thirteen;
+@property (nonatomic, assign) BOOL thirteenTwo;
 @property (nonatomic, assign) BOOL thirteenFour;
 @property (nonatomic, assign) BOOL thirteenFive;
 @property (nonatomic, assign) BOOL fourteen;
+@property (nonatomic, assign) BOOL fourteenOne;
+@property (nonatomic, assign) BOOL fourteenTwo;
+@property (nonatomic, assign) BOOL fourteenThree;
+@property (nonatomic, assign) BOOL fourteenFour;
+@property (nonatomic, assign) BOOL fourteenFive;
 /* CHECKS */
 @property (nonatomic, assign) BOOL failure;
 @property (nonatomic, assign) BOOL alreadyHas;

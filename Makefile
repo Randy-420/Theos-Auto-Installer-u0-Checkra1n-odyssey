@@ -4,7 +4,6 @@ export TARGET:=iphone:clang:13.5:7.0
 TOOL_NAME = tai
 tai_FILES = main.m $(wildcard functions/*.m)
 tai_FRAMEWORKS = UIKit
-tai_CODESIGN_FLAGS = -Sent.plist
 tai_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tool.mk
