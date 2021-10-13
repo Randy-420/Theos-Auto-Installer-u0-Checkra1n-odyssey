@@ -157,7 +157,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 -(bool)sdk:(NSString *)sdk Link:(NSString *)Link {
-	Link = [NSString stringWithFormat:@"https://dropbox.com/s/%@", Link];
+	Link = [NSString stringWithFormat:@"https://dropbox.com/s/%@/%@.zip", Link, sdk];
 	Loc = [NSString stringWithFormat:@"%@/sdks/iPhoneOS%@.sdk", installHere, sdk];
 	if (![fm fileExistsAtPath:Loc]) {
 		runCode = [NSString stringWithFormat:@"echo \"curl -LO %@\" | gap;TMP=$(mktemp -d);echo \"unzip %@.zip -d $TMP\" | gap;echo \"mv $TMP/*.sdk %@/sdks;echo\" | gap;echo \"rm -r %@.zip $TMP\" | gap", Link, sdk, installHere, sdk];
@@ -181,63 +181,59 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 		}
 	} else {
 		self.alreadyHas = YES;
-		if (self.useColor) {
-			ignored = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset];
-		} else {
-			ignored = [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", ignored, sdk];
-		}
+		ignored = self.useColor ? [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset] : [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", ignored, sdk];
 	}
 	return (YES);
 }
 
 -(void)DoWnLoAd {
 	if (self.all) {
-		[self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5/8.4.zip"];
-		[self sdk:@"9.3" Link:@"8qhz72yeumz5swy/9.3.zip"];
-		[self sdk:@"10.0" Link:@"19vezfdtnp074kt/10.0.zip"];
-		[self sdk:@"10.3" Link:@"fdze31wrnukk3t7/10.3.zip"];
-		[self sdk:@"11.0" Link:@"hwg97eqgskbyyr1/11.0.zip"];
-		[self sdk:@"11.1" Link:@"m7n5iflnt2b0a46/11.1.zip"];
-		[self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w/11.2.zip"];
-		[self sdk:@"11.3" Link:@"taxziihftkm1z4d/11.3.zip"];
-		[self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn/11.4.zip"];
-		[self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f/12.1.2.zip"];
-		[self sdk:@"12.2" Link:@"l85lp0lbrztbdun/12.2.zip"];
-		[self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm/12.4.zip"];
-		[self sdk:@"13.0" Link:@"fujs52jmc6vdh37/13.0.zip"];
-		[self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww/13.2.zip"];
-		[self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq/13.4.zip"];
-		[self sdk:@"13.5" Link:@"ztqcfo7okv6276p/13.5.zip"];
-		[self sdk:@"14.0" Link:@"ly8627ncpaiv6ji/14.0.zip"];
-		[self sdk:@"14.1" Link:@"jvonok3de24ibsz/14.1.zip"];
-		[self sdk:@"14.2" Link:@"71n5fslaz5uiwc3/14.2.zip"];
-		[self sdk:@"14.3" Link:@"ggydf4vh3kwafdi/14.3.zip"];
-		[self sdk:@"14.4" Link:@"d47tnjb1cfizj61/14.4.zip"];
-		[self sdk:@"14.5" Link:@"t10nazl6vo20ya7/14.5.zip"];
+		[self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"];
+		[self sdk:@"9.3" Link:@"8qhz72yeumz5swy"];
+		[self sdk:@"10.0" Link:@"19vezfdtnp074kt"];
+		[self sdk:@"10.3" Link:@"fdze31wrnukk3t7"];
+		[self sdk:@"11.0" Link:@"hwg97eqgskbyyr1"];
+		[self sdk:@"11.1" Link:@"m7n5iflnt2b0a46"];
+		[self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w"];
+		[self sdk:@"11.3" Link:@"taxziihftkm1z4d"];
+		[self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn"];
+		[self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f"];
+		[self sdk:@"12.2" Link:@"l85lp0lbrztbdun"];
+		[self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm"];
+		[self sdk:@"13.0" Link:@"fujs52jmc6vdh37"];
+		[self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww"];
+		[self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq"];
+		[self sdk:@"13.5" Link:@"ztqcfo7okv6276p"];
+		[self sdk:@"14.0" Link:@"ly8627ncpaiv6ji"];
+		[self sdk:@"14.1" Link:@"jvonok3de24ibsz"];
+		[self sdk:@"14.2" Link:@"71n5fslaz5uiwc3"];
+		[self sdk:@"14.3" Link:@"ggydf4vh3kwafdi"];
+		[self sdk:@"14.4" Link:@"d47tnjb1cfizj61"];
+		[self sdk:@"14.5" Link:@"t10nazl6vo20ya7"];
 		return;
 	}
-	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5/8.4.zip"] : 0;
-	self.nineThree ? [self sdk:@"9.3" Link:@"8qhz72yeumz5swy/9.3.zip"] : 0;
-	self.ten ? [self sdk:@"10.0" Link:@"19vezfdtnp074kt/10.0.zip"] : 0;
-	self.tenThree ? [self sdk:@"10.3" Link:@"fdze31wrnukk3t7/10.3.zip"] : 0;
-	self.eleven ? [self sdk:@"11.0" Link:@"hwg97eqgskbyyr1/11.0.zip"] : 0;
-	self.elevenOne ? [self sdk:@"11.1" Link:@"m7n5iflnt2b0a46/11.1.zip"] : 0;
-	self.elevenTwo ? [self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w/11.2.zip"] : 0;
-	self.elevenThree ? [self sdk:@"11.3" Link:@"taxziihftkm1z4d/11.3.zip"] : 0;
-	self.elevenFour ? [self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn/11.4.zip"] : 0;
-	self.twelveOneTwo ? [self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f/12.1.2.zip"] : 0;
-	self.twelveTwo ? [self sdk:@"12.2" Link:@"l85lp0lbrztbdun/12.2.zip"] : 0;
-	self.twelveFour ? [self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm/12.4.zip"] : 0;
-	self.thirteen ? [self sdk:@"13.0" Link:@"fujs52jmc6vdh37/13.0.zip"] : 0;
-	self.thirteenTwo ? [self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww/13.2.zip"] : 0;
-	self.thirteenFour ? [self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq/13.4.zip"] : 0;
-	self.thirteenFive ? [self sdk:@"13.5" Link:@"ztqcfo7okv6276p/13.5.zip"] : 0;
-	self.fourteen ? [self sdk:@"14.0" Link:@"ly8627ncpaiv6ji/14.0.zip"] : 0;
-	self.fourteenOne ? [self sdk:@"14.1" Link:@"jvonok3de24ibsz/14.1.zip"] : 0;
-	self.fourteenTwo ? [self sdk:@"14.2" Link:@"71n5fslaz5uiwc3/14.2.zip"] : 0;
-	self.fourteenThree ? [self sdk:@"14.3" Link:@"ggydf4vh3kwafdi/14.3.zip"] : 0;
-	self.fourteenFour ? [self sdk:@"14.4" Link:@"d47tnjb1cfizj61/14.4.zip"] : 0;
-	self.fourteenFive ? [self sdk:@"14.5" Link:@"t10nazl6vo20ya7/14.5.zip"] : 0;
+	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"] : 0;
+	self.nineThree ? [self sdk:@"9.3" Link:@"8qhz72yeumz5swy"] : 0;
+	self.ten ? [self sdk:@"10.0" Link:@"19vezfdtnp074kt"] : 0;
+	self.tenThree ? [self sdk:@"10.3" Link:@"fdze31wrnukk3t7"] : 0;
+	self.eleven ? [self sdk:@"11.0" Link:@"hwg97eqgskbyyr1"] : 0;
+	self.elevenOne ? [self sdk:@"11.1" Link:@"m7n5iflnt2b0a46"] : 0;
+	self.elevenTwo ? [self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w"] : 0;
+	self.elevenThree ? [self sdk:@"11.3" Link:@"taxziihftkm1z4d"] : 0;
+	self.elevenFour ? [self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn"] : 0;
+	self.twelveOneTwo ? [self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f"] : 0;
+	self.twelveTwo ? [self sdk:@"12.2" Link:@"l85lp0lbrztbdun"] : 0;
+	self.twelveFour ? [self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm"] : 0;
+	self.thirteen ? [self sdk:@"13.0" Link:@"fujs52jmc6vdh37"] : 0;
+	self.thirteenTwo ? [self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww"] : 0;
+	self.thirteenFour ? [self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq"] : 0;
+	self.thirteenFive ? [self sdk:@"13.5" Link:@"ztqcfo7okv6276p"] : 0;
+	self.fourteen ? [self sdk:@"14.0" Link:@"ly8627ncpaiv6ji"] : 0;
+	self.fourteenOne ? [self sdk:@"14.1" Link:@"jvonok3de24ibsz"] : 0;
+	self.fourteenTwo ? [self sdk:@"14.2" Link:@"71n5fslaz5uiwc3"] : 0;
+	self.fourteenThree ? [self sdk:@"14.3" Link:@"ggydf4vh3kwafdi"] : 0;
+	self.fourteenFour ? [self sdk:@"14.4" Link:@"d47tnjb1cfizj61"] : 0;
+	self.fourteenFive ? [self sdk:@"14.5" Link:@"t10nazl6vo20ya7"] : 0;
 }
 
 /*-(void)upDateTheos {
