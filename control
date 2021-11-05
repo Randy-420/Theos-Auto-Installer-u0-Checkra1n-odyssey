@@ -3,7 +3,15 @@ Name: Theos Auto Installer
 Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid, rsync, xz, dpkg, lz4, make, perl, odcctools, darwintools, llvm, llvm-10, libllvm10, com.bingner.plutil, com.randy420.tools (>= 1.7), mterminal, com.kabiroberai.swift-toolchain, openssl, com.opa334.ccsupport
 Conflicts: net.howett.theos, com.randy420.encrypt
 Architecture: iphoneos-arm
-Description: https://Randy-420.GitHub.io/depic/tai.html
+Description: Install Theos from terminal using a simple terminal command (CONFIGURE FROM SETTINGS AND CONNECT TO WIFI) 
+• tai 
+ 
+UNINSTALL THEOS 
+• tai -u 
+ 
+REINSTALL THEOS 
+• tai -r
+Depiction: https://Randy-420.GitHub.io/depic/tai.html
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <randy.skinner@hotmail.com>
 Author: Randy420 <randy.skinner@hotmail.com>
