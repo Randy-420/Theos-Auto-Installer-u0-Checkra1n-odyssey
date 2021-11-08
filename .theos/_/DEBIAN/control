@@ -4,13 +4,13 @@ Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid
 Conflicts: net.howett.theos, com.randy420.encrypt
 Architecture: iphoneos-arm
 Description: Install Theos from terminal using a simple terminal command (CONFIGURE FROM SETTINGS AND CONNECT TO WIFI) 
- • tai 
- 
- UNINSTALL THEOS 
- • tai -u 
- 
- REINSTALL THEOS 
- • tai -r
+  • tai 
+  
+  UNINSTALL THEOS 
+  • tai -u 
+  
+  REINSTALL THEOS 
+  • tai -r
 Depiction: https://Randy-420.GitHub.io/depic/tai.html
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <randy.skinner@hotmail.com>
