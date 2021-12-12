@@ -17,7 +17,10 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 }
 
 @implementation tai
--(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit { 
+-(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit {
+	if (self.abyss)
+		RunCMD = [RunCMD stringByReplacingOccurrencesOfString: @"\" | gap" withString:@">/dev/null 2>&1\" | gap"];
+
 	NSString *SSHGetFlex = [NSString stringWithFormat:@"%@",RunCMD];
 
 	NSTask *task = [[NSTask alloc] init];
@@ -32,6 +35,11 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 
 	if (WaitUntilExit)
 		[task waitUntilExit];
+}
+
+-(void)fixTheos{
+	runCode = @"echo \"fixTheos\" | gap";
+	[self RunCMD:runCode WaitUntilExit:YES];
 }
 
 -(void)makeTweaksFolder {
@@ -69,6 +77,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	leaf = [NSString stringWithFormat:@"%@\t     %sT%sheos %sA%suto %sI%snstaller%s\n", leaf, c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_reset];
 	leaf = [NSString stringWithFormat:@"%@%s                     Randy420\n%s\n", leaf, c_red, c_reset];
 	installHere = GetNSString(@"Location", @"/var/theos", @"com.randy420.tai");
+	self.autoRm = GetBool(@"autoRm", YES, @"com.randy420.tai");
 
 	self.enhance = GetBool(@"enhance", NO, @"com.randy420.tai");
 	self.all = GetBool(@"sdks-master", NO, @"com.randy420.tai");
@@ -93,7 +102,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	self.fourteenTwo = GetBool(@"14.2", NO, @"com.randy420.tai");
 	self.fourteenThree = GetBool(@"14.3", NO, @"com.randy420.tai");
 	self.fourteenFour = GetBool(@"14.4", NO, @"com.randy420.tai");
-	self.fourteenFive = GetBool(@"14.5", NO, @"com.randy420.tai");
+	//self.fourteenFive = GetBool(@"14.5", NO, @"com.randy420.tai");
 
 	self.installedTheos = [fm fileExistsAtPath:@"/theos"];
 	self.installedVarTheos = [fm fileExistsAtPath:@"/var/theos"];
@@ -112,46 +121,27 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	self.previousInstall = (self.installedTheos || self.installedVarTheos);
 	self.totalDownloaded = 0;
 
-	if (self.useColor) {
-		printf("%s\n\n", [leaf UTF8String]);
-		sleep(1);
-		successfulSdk = [NSString stringWithFormat:@"[%sSuccessfully downloaded SDKS%s]\n", c_green, c_reset];
-		failedSdk = [NSString stringWithFormat:@"[%sFailed Installing SDKS%s]\n", c_red, c_reset];
-		enhanceMsg = [NSString stringWithFormat:@"[%sDev Tools Installed%s]\n", c_green, c_reset];
-		ignored = [NSString stringWithFormat:@"[%sPreviously installed SDKS%s]\n", c_yellow, c_reset];
-		tFolderSuc = [NSString stringWithFormat:@"[%sTweaks folder created successfully%s]\n", c_green, c_reset];
-		tFolderFail = [NSString stringWithFormat:@"[%sFailed to make /var/mobile/tweaks%s]\n", c_red, c_reset];
-		tFolderIgnore = [NSString stringWithFormat:@"[%stweaks folder already exists%s]\n", c_yellow, c_reset];
-		updated = [NSString stringWithFormat:@"[%sTheos is now Up-To-Date%s]\n", c_green, c_reset];
-		theosFailureMessage = [NSString stringWithFormat:@"[%sTheos install FAILED!%s]\n", c_red, c_reset];
-		theosSuccessMessage = [NSString stringWithFormat:@"[%sTheos installed To '%@'%s]\n", c_green, installHere, c_reset];
-		checkInstall = [NSString stringWithFormat:@"[%s!!%sMAKE SURE THE INSTALL LOCATION IS RIGHT IN SETTINGS%s!!%s]\n", c_cyan, c_red, c_cyan, c_reset];
-		if (self.installedTheos && self.installedVarTheos) {
-			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s' & '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_red, c_yellow, c_reset];
-		} else if (self.installedVarTheos) {
-			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
-		} else {
-			previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
-		}
+	printf("%s\n\n", [leaf UTF8String]);
+	sleep(1);
+	successfulSdk = [NSString stringWithFormat:@"[%sSuccessfully downloaded SDKS%s]\n", c_green, c_reset];
+	failedSdk = [NSString stringWithFormat:@"[%sFailed Installing SDKS%s]\n", c_red, c_reset];
+	enhanceMsg = [NSString stringWithFormat:@"[%sDev Tools Installed%s]\n", c_green, c_reset];
+	ignored = [NSString stringWithFormat:@"[%sPreviously installed SDKS%s]\n", c_yellow, c_reset];
+	tFolderSuc = [NSString stringWithFormat:@"[%sTweaks folder created successfully%s]\n", c_green, c_reset];
+	tFolderFail = [NSString stringWithFormat:@"[%sFailed to make /var/mobile/tweaks%s]\n", c_red, c_reset];
+	tFolderIgnore = [NSString stringWithFormat:@"[%stweaks folder already exists%s]\n", c_yellow, c_reset];
+	updated = [NSString stringWithFormat:@"[%sTheos is now Up-To-Date%s]\n", c_green, c_reset];
+	theosFailureMessage = [NSString stringWithFormat:@"[%sTheos install FAILED!%s]\n", c_red, c_reset];
+	theosSuccessMessage = [NSString stringWithFormat:@"[%sTheos installed To '%@'%s]\n", c_green, installHere, c_reset];
+	checkInstall = [NSString stringWithFormat:@"[%s!!%sMAKE SURE THE INSTALL LOCATION IS RIGHT IN SETTINGS%s!!%s]\n", c_cyan, c_red, c_cyan, c_reset];
+	failedRm = [NSString stringWithFormat:@"[%sFailed To Renove SDKS Removed From: '%@/SDKS/'%s]\n", c_red, installHere, c_reset];
+	successfulRm = [NSString stringWithFormat:@"[%sSDKS Removed From: '%@/SDKS/'%s]\n", c_green, installHere, c_reset];
+	if (self.installedTheos && self.installedVarTheos) {
+		previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s' & '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_red, c_yellow, c_reset];
+	} else if (self.installedVarTheos) {
+		previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/var/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
 	} else {
-		successfulSdk = @"[Successfully downloaded SDKS]\n";
-		failedSdk = @"[Failed Installing SDKS]\n";
-		enhanceMsg = @"[Dev Tools Installed]\n";
-		checkInstall = @"[!!MAKE SURE THE INSTALL LOCATION IS RIGHT IN SETTINGS!!]\n";
-		ignored = @"[Ignored Previously Installed SDKS]\n";
-		tFolderSuc = @"[Tweaks folder created successfully]\n";
-		tFolderFail = @"[Failed to make /var/mobile/tweaks]\n";
-		tFolderIgnore = @"[tweaks folder already exists]\n";
-		updated = @"[Theos is now Up-To-Date]\n";
-		theosFailureMessage = @"[Theos install FAILED!]\n";
-		theosSuccessMessage = [NSString stringWithFormat:@"[Theos installed To '%@']\n", installHere];
-		if (self.installedTheos && self.installedVarTheos) {
-			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos' & '/var/theos']\n"];
-		} else if (self.installedVarTheos) {
-			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/var/theos']\n"];
-		} else {
-			previousInstallMsg = [NSString stringWithFormat:@"[Theos previously installed to '/theos']\n"];
-		}
+		previousInstallMsg = [NSString stringWithFormat:@"[%sTheos previously installed to '%s/theos%s'%s]\n", c_yellow, c_red, c_yellow, c_reset];
 	}
 	msg = @"";
 }
@@ -164,26 +154,33 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 		[self RunCMD:runCode WaitUntilExit: YES];
 		self.totalDownloaded += 1;
 		if ([fm fileExistsAtPath: Loc]) {
-			if (self.useColor) {
-				successfulSdk = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", successfulSdk, c_green, sdk, c_reset];
-			} else {
-				successfulSdk = [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", successfulSdk, sdk];
-			}
+			successfulSdk = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", successfulSdk, c_green, sdk, c_reset];
 			return (YES);
 		} else {
-			if (self.useColor) {
-				failedSdk = [NSString stringWithFormat:@"%@ ~%siPhoneOS %@ SDK%s\n", failedSdk, c_red, sdk, c_reset];
-			} else {
-				failedSdk = [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", failedSdk, sdk];
-			}
+			failedSdk = [NSString stringWithFormat:@"%@ ~%siPhoneOS %@ SDK%s\n", failedSdk, c_red, sdk, c_reset];
 			self.failure = YES;
 			return (NO);
 		}
 	} else {
 		self.alreadyHas = YES;
-		ignored = self.useColor ? [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset] : [NSString stringWithFormat:@"%@ ~iPhoneOS %@ SDK\n", ignored, sdk];
+		ignored = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", ignored, c_yellow, sdk, c_reset];
 	}
 	return (YES);
+}
+
+-(void)remove:(NSString *)sdk {
+	Loc = [NSString stringWithFormat:@"%@/sdks/iPhoneOS%@.sdk", installHere, sdk];
+	if ([fm fileExistsAtPath:Loc]) {
+		runCode = [NSString stringWithFormat:@"echo \"rm -r %@\" | gap", Loc];
+		[self RunCMD:runCode WaitUntilExit: YES];
+		self.totalRemoved += 1;
+		if (![fm fileExistsAtPath:Loc]) {
+			successfulRm = [NSString stringWithFormat:@"%@%s ~iPhoneOS %@ SDK%s\n", successfulRm, c_green, sdk, c_reset];
+		} else {
+			failedRm = [NSString stringWithFormat:@"%@ ~%siPhoneOS %@ SDK%s\n", failedRm, c_red, sdk, c_reset];
+			self.rmFailure = YES;
+		}
+	}
 }
 
 -(void)DoWnLoAd {
@@ -209,42 +206,88 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 		[self sdk:@"14.2" Link:@"71n5fslaz5uiwc3"];
 		[self sdk:@"14.3" Link:@"ggydf4vh3kwafdi"];
 		[self sdk:@"14.4" Link:@"d47tnjb1cfizj61"];
-		[self sdk:@"14.5" Link:@"t10nazl6vo20ya7"];
+//		[self sdk:@"14.5" Link:@"t10nazl6vo20ya7"];
+		[self remove:@"14.5"];
 		return;
 	}
-	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"] : 0;
-	self.nineThree ? [self sdk:@"9.3" Link:@"8qhz72yeumz5swy"] : 0;
-	self.ten ? [self sdk:@"10.0" Link:@"19vezfdtnp074kt"] : 0;
-	self.tenThree ? [self sdk:@"10.3" Link:@"fdze31wrnukk3t7"] : 0;
-	self.eleven ? [self sdk:@"11.0" Link:@"hwg97eqgskbyyr1"] : 0;
-	self.elevenOne ? [self sdk:@"11.1" Link:@"m7n5iflnt2b0a46"] : 0;
-	self.elevenTwo ? [self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w"] : 0;
-	self.elevenThree ? [self sdk:@"11.3" Link:@"taxziihftkm1z4d"] : 0;
-	self.elevenFour ? [self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn"] : 0;
-	self.twelveOneTwo ? [self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f"] : 0;
-	self.twelveTwo ? [self sdk:@"12.2" Link:@"l85lp0lbrztbdun"] : 0;
-	self.twelveFour ? [self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm"] : 0;
-	self.thirteen ? [self sdk:@"13.0" Link:@"fujs52jmc6vdh37"] : 0;
-	self.thirteenTwo ? [self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww"] : 0;
-	self.thirteenFour ? [self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq"] : 0;
-	self.thirteenFive ? [self sdk:@"13.5" Link:@"ztqcfo7okv6276p"] : 0;
-	self.fourteen ? [self sdk:@"14.0" Link:@"ly8627ncpaiv6ji"] : 0;
-	self.fourteenOne ? [self sdk:@"14.1" Link:@"jvonok3de24ibsz"] : 0;
-	self.fourteenTwo ? [self sdk:@"14.2" Link:@"71n5fslaz5uiwc3"] : 0;
-	self.fourteenThree ? [self sdk:@"14.3" Link:@"ggydf4vh3kwafdi"] : 0;
-	self.fourteenFour ? [self sdk:@"14.4" Link:@"d47tnjb1cfizj61"] : 0;
-	self.fourteenFive ? [self sdk:@"14.5" Link:@"t10nazl6vo20ya7"] : 0;
+	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"] :self.autoRm ? [self remove:@"8.4"] :  0;
+	self.nineThree ? [self sdk:@"9.3" Link:@"8qhz72yeumz5swy"] : self.autoRm ? [self remove:@"9.3"] : 0;
+	self.ten ? [self sdk:@"10.0" Link:@"19vezfdtnp074kt"] : self.autoRm ? [self remove:@"10.0"] : 0;
+	self.tenThree ? [self sdk:@"10.3" Link:@"fdze31wrnukk3t7"] : self.autoRm ? [self remove:@""] : 0;
+	self.eleven ? [self sdk:@"11.0" Link:@"hwg97eqgskbyyr1"] : self.autoRm ? [self remove:@"11.0"] : 0;
+	self.elevenOne ? [self sdk:@"11.1" Link:@"m7n5iflnt2b0a46"] : self.autoRm ? [self remove:@"11.1"] : 0;
+	self.elevenTwo ? [self sdk:@"11.2" Link:@"ak3bjqi4nz0yo0w"] : self.autoRm ? [self remove:@"11.2"] : 0;
+	self.elevenThree ? [self sdk:@"11.3" Link:@"taxziihftkm1z4d"] : self.autoRm ? [self remove:@"11.3"] : 0;
+	self.elevenFour ? [self sdk:@"11.4" Link:@"l0r7yz0ggffb0zn"] : self.autoRm ? [self remove:@"11.4"] : 0;
+	self.twelveOneTwo ? [self sdk:@"12.1.2" Link:@"2zxfr7qk3fcnm8f"] : self.autoRm ? [self remove:@"12.1.2"] : 0;
+	self.twelveTwo ? [self sdk:@"12.2" Link:@"l85lp0lbrztbdun"] : self.autoRm ? [self remove:@"12.2"] : 0;
+	self.twelveFour ? [self sdk:@"12.4" Link:@"s3dmz4bqx3ayixm"] : self.autoRm ? [self remove:@"12.4"] : 0;
+	self.thirteen ? [self sdk:@"13.0" Link:@"fujs52jmc6vdh37"] : self.autoRm ? [self remove:@"13.0"] : 0;
+	self.thirteenTwo ? [self sdk:@"13.2" Link:@"wq1ri0gtxk3ofww"] : self.autoRm ? [self remove:@"13.2"] : 0;
+	self.thirteenFour ? [self sdk:@"13.4" Link:@"hxtkxy9c1fu71nq"] : self.autoRm ? [self remove:@"13.4"] : 0;
+	self.thirteenFive ? [self sdk:@"13.5" Link:@"ztqcfo7okv6276p"] : self.autoRm ? [self remove:@"13.5"] : 0;
+	self.fourteen ? [self sdk:@"14.0" Link:@"ly8627ncpaiv6ji"] : self.autoRm ? [self remove:@"14.0"] : 0;
+	self.fourteenOne ? [self sdk:@"14.1" Link:@"jvonok3de24ibsz"] : self.autoRm ? [self remove:@"14.1"] : 0;
+	self.fourteenTwo ? [self sdk:@"14.2" Link:@"71n5fslaz5uiwc3"] : self.autoRm ? [self remove:@"14.2"] : 0;
+	self.fourteenThree ? [self sdk:@"14.3" Link:@"ggydf4vh3kwafdi"] : self.autoRm ? [self remove:@"14.3"] : 0;
+	self.fourteenFour ? [self sdk:@"14.4" Link:@"d47tnjb1cfizj61"] : self.autoRm ? [self remove:@"14.4"] : 0;
+	[self remove:@"14.5"];
+	//self.fourteenFive ? [self sdk:@"14.5" Link:@"t10nazl6vo20ya7"] : 0;
 }
 
-/*-(void)upDateTheos {
+-(void)upDateTheos {
 	[self RunCMD: @"echo \"$THEOS/bin/update-theos\" | gap" WaitUntilExit: YES];
 	self.theosUpdate = YES;
-}*/
+}
+
+-(void)checkTerm {
+	char *cterm = getenv("TERM") ?: "";
+	if (!strcmp(cterm, "xterm-color")) {
+		printf("PLEASE RUN THEOS AUTO INSTALLER USING MTERMINAL\n-> NewTerm CRASHES\n");
+		exit (0);
+	}
+}
+
+-(BOOL)dTheos:(BOOL)dTheos {
+	if (dTheos) {
+		if (self.installedTheos && self.installedVarTheos){
+			runCode = @"echo \"rm -rf /theos\" | gap;echo \"rm -rf /var/theos\" | gap";
+		} else if (self.installedTheos){
+			runCode = @"echo \"rm -rf /theos\" | gap";
+		} else if ([fm fileExistsAtPath:@"/var/theos"]){
+			runCode = @"echo \"rm -rf /var/theos\" | gap";
+		}
+
+		[self RunCMD:runCode WaitUntilExit:YES];
+
+		self.installedTheos = [fm fileExistsAtPath:@"/theos"];
+		self.installedVarTheos = [fm fileExistsAtPath:@"/var/theos"];
+
+		if (!(self.installedTheos && self.installedVarTheos)) {
+			printf("%sTheos %suninstalled %sSuccessfully!%s\n", c_cyan, c_red, c_cyan, c_reset);
+		} else {
+			printf("%sUnable to uninstall %sTheos%s\n", c_red, c_cyan, c_reset);
+			sleep(3);
+			return(NO);
+		}
+	}
+	return(YES);
+}
+
+-(void)startup{
+///////////////////////////////////////
+////       •Admin•Handling•        ////
+///////////////////////////////////////
+	self.useColor = YES;
+	self.basicOut = NO;
+	[self loader];
+	[self checkTerm];
+}
 
 -(void)enhancer{
 	if (self.enhance) {
 		if ([fm fileExistsAtPath:installHere]) {
-			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | gap;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | gap;echo \"mv $TMP/include/* %@/include\" | gap;echo \"mv $TMP/lib/* %@/lib\" | gap;echo \"mv $TMP/templates/* %@/templates\" | gap;echo \"mv $TMP/vendor/* %@/vendor\" | gap;echo;echo \"rm -r includes.zip $TMP\" | gap;", installHere, installHere, installHere, installHere];
+			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | gap;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | gap;echo \"mv $TMP/include/* %@/include\" | gap;echo \"mv $TMP/lib/* %@/lib\" | gap;echo \"mv $TMP/templates/* %@/templates\" | gap;echo \"mv $TMP/vendor/* %@/vendor\" | gap;echo;echo \"rm -r includes.zip $TMP\" | gap", installHere, installHere, installHere, installHere];
 			[self RunCMD:runCode WaitUntilExit: YES];
 		}
 		if ([fm fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fm fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]) {
@@ -253,15 +296,23 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	}
 }
 
--(void)addMsg: (NSString *)addMsg{
+-(void)addMsg:(NSString *)addMsg{
+	NSArray *Remove = @[@"\x1B[30m", @"\x1B[31m", @"\x1B[32m", @"\x1B[33m", @"\x1B[34m", @"\x1B[35m", @"\x1B[36m", @"\x1B[37m"];
+
+	if (!self.useColor){
+		for (unsigned int i = 0; i < [Remove count]; i++){
+			addMsg = [addMsg stringByReplacingOccurrencesOfString:Remove[i] withString:@"\x1B[0m"];
+		}
+	}
+
 	msg = [NSString stringWithFormat:@"%@%@\n", msg, addMsg];
 }
 
 -(void)popup{
 	[self addMsg:leaf];
-		self.theosUpdate ? [self addMsg:updated] : 0;
+	self.theosUpdate ? [self addMsg:updated] : 0;
 	self.installSuccess ? [self addMsg:theosSuccessMessage] : 0;
-	if (self.tweaksExists){
+	if (self.tweaksExists && !self.theosUpdate){
 		[self addMsg:tFolderIgnore];
 	}else{
 		if (!self.theosUpdate) {
@@ -282,6 +333,9 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 		[self addMsg:failedSdk];
 		[self addMsg:checkInstall];
 	}
+
+	self.rmFailure ? [self addMsg:failedRm] : 0;
+	self.totalRemoved >= 1 ? [self addMsg:successfulRm] : 0;
 
 	if (self.PoPuP) {
 		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Installation Results" message: msg preferredStyle:UIAlertControllerStyleAlert];

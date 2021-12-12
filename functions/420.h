@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #include <spawn.h>
 #include "includes.h"
+#import <MobileCoreServices/UTCoreTypes.h>
 
 @interface UIDevice ()
 - (id)_deviceInfoForKey:(NSString *)key;  
@@ -25,6 +26,8 @@
 	NSString *dlLinK;
 	NSString *installHere;
 	NSString *checkInstall;
+	NSString *failedRm;
+	NSString *successfulRm;
 	NSString *leaf;
 	NSMutableDictionary *preferences;
 	NSFileManager *fm;
@@ -72,19 +75,29 @@
 @property (nonatomic, assign) BOOL useColor;
 @property (nonatomic, assign) BOOL installedTheos;
 @property (nonatomic, assign) BOOL installedVarTheos;
+@property (nonatomic, assign) BOOL abyss;
+@property (nonatomic, assign) BOOL rmFailure;
+@property (nonatomic, assign) BOOL autoRm;
+@property (nonatomic, assign) BOOL basicOut;
 /* COUNTER */
 @property (nonatomic, assign) int totalDownloaded;
+@property (nonatomic, assign) int totalRemoved;
 
 -(void) RunCMD:(NSString *)RunCMD WaitUntilExit:(BOOL)WaitUntilExit;
+-(void) fixTheos;
 -(void) makeTweaksFolder;
 -(BOOL) theosInstall;
 -(void) loader;
+-(void)remove:(NSString *)sdk;
 -(bool) sdk:(NSString*)sdk Link:(NSString*)Link;
 -(void) DoWnLoAd;
-//-(void) upDateTheos;
+-(void) upDateTheos;
 -(void) enhancer;
 -(void) addMsg:(NSString *)mSg;
 -(void) popup;
+-(void)checkTerm;
+-(BOOL)dTheos:(BOOL)dTheos;
+-(void)startup;
 @end
 
 // NSTask.h
