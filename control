@@ -1,21 +1,19 @@
 Package: com.randy420.tai
 Name: Theos Auto Installer
-Depends: clang-10, clang, curl, git, coreutils, unzip, coreutils-bin, grep, ldid, rsync, xz, dpkg, lz4, make, perl, odcctools, darwintools, llvm, llvm-10, libllvm10, com.bingner.plutil, com.randy420.tools (>= 2.1), mterminal, com.kabiroberai.swift-toolchain, openssl, com.opa334.ccsupport
+Depends: com.randy420.tools (>= 2.2), com.randy420.taidependsother | com.randy420.taidependscoolstar
 Conflicts: net.howett.theos, com.randy420.encrypt
 Architecture: iphoneos-arm
 Description: Install Theos from terminal using a simple terminal command (CONFIGURE FROM SETTINGS AND CONNECT TO WIFI) 
- • tai 
-  
+ - tai
  UNINSTALL THEOS 
- • tai -u 
-  
+ - tai -u 
  REINSTALL THEOS 
- • tai -r
+ - tai -r
 Depiction: https://Randy-420.GitHub.io/depic/tai.html
 Homepage: https://theemeraldisle.family
 Maintainer: Randy420 <randy.skinner@hotmail.com>
 Author: Randy420 <randy.skinner@hotmail.com>
-Version: 5.1.8
+Version: 5.1.9
 Replaces: com.randy420.encrypt
 Section: System
 Tag: role::hacker

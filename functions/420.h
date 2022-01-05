@@ -1,7 +1,41 @@
+#pragma GCC diagnostic ignored "-Wunused-function"
 #import <Foundation/Foundation.h>
 #include <spawn.h>
 #include "includes.h"
 #import <MobileCoreServices/UTCoreTypes.h>
+
+static NSString *local(NSString *local, NSString *def){
+	NSString *path = @"/Library/Application Support/Theos Auto Installer";
+	NSString *tPath;
+	NSArray *languages = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+	NSArray *preferredLanguages = [NSLocale preferredLanguages];
+
+	for (NSString *preferredLanguage in preferredLanguages){
+		for (NSString *language in languages){
+			if ([preferredLanguage hasPrefix:[language stringByReplacingOccurrencesOfString:@".lproj" withString:@""]]){
+				tPath = [path stringByAppendingPathComponent:language];
+				if ([[NSFileManager defaultManager] fileExistsAtPath:tPath]){
+					path = tPath;
+					return [[NSBundle bundleWithPath:path] localizedStringForKey:local value:def table:@"tai"];
+				}
+			}
+		}
+	}
+
+	return [[NSBundle bundleWithPath:path] localizedStringForKey:local value:def table:@"tai"];
+}
+
+static NSString *GetNSString(NSString *pkey, NSString *defaultValue, NSString *plst){
+NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist",plst]];
+
+	return [Dict objectForKey:pkey] ? [Dict objectForKey:pkey] : defaultValue;
+}
+
+static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
+	NSDictionary *Dict = [NSDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist",plst]];
+
+	return [Dict objectForKey:pkey] ? [[Dict objectForKey:pkey] boolValue] : defaultValue;
+}
 
 @interface UIDevice ()
 - (id)_deviceInfoForKey:(NSString *)key;  
@@ -12,7 +46,6 @@
 	NSString *runCode;
 	NSString *tFolderSuc;
 	NSString *tFolderFail;
-	NSString *tFolderIgnore;
 	NSString *previousInstallMsg;
 	NSString *theosSuccessMessage;
 	NSString *theosFailureMessage;
@@ -21,6 +54,7 @@
 	NSString *ignored;
 	NSString *enhanceMsg;
 	NSString *updated;
+	NSString *updateFail;
 	NSString *Loc;
 	NSString *msg;
 	NSString *dlLinK;
@@ -69,16 +103,17 @@
 @property (nonatomic, assign) BOOL tweaksExists;
 @property (nonatomic, assign) BOOL folderFailed;
 @property (nonatomic, assign) BOOL theosUpdate;
+@property (nonatomic, assign) BOOL theosUpdateFail;
 @property (nonatomic, assign) BOOL attempted;
 @property (nonatomic, assign) BOOL failed;
 @property (nonatomic, assign) BOOL PoPuP;
 @property (nonatomic, assign) BOOL useColor;
 @property (nonatomic, assign) BOOL installedTheos;
 @property (nonatomic, assign) BOOL installedVarTheos;
+@property (nonatomic, assign) BOOL installFirst;
 @property (nonatomic, assign) BOOL abyss;
 @property (nonatomic, assign) BOOL rmFailure;
 @property (nonatomic, assign) BOOL autoRm;
-@property (nonatomic, assign) BOOL basicOut;
 /* COUNTER */
 @property (nonatomic, assign) int totalDownloaded;
 @property (nonatomic, assign) int totalRemoved;
@@ -95,9 +130,13 @@
 -(void) enhancer;
 -(void) addMsg:(NSString *)mSg;
 -(void) popup;
+-(void) updateInstall;
 -(void)checkTerm;
 -(BOOL)dTheos:(BOOL)dTheos;
+-(void)header;
 -(void)startup;
+-(void)Print:(NSString *)Print;
+-(void) addToProfile:(BOOL)addToProfile profile:(NSString *)profile;
 @end
 
 // NSTask.h
