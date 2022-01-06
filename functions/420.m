@@ -409,7 +409,7 @@ extern char **environ;
 		if (!added)
 			Archs = @"arm64 arm64e";
 			
-	NSString *ARCHS = [NSString stringWithFormat:@"export ARCHS=\"%@\n\"", Archs];
+	NSString *ARCHS = [NSString stringWithFormat:@"export ARCHS=\"%@\"\n", Archs];
 
 	NSString *addToFile = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@", DIV, DIV1, DIV2, DIV, THEOS, ARCHS, DEBUG, FINAL, MAKE, MAKEC, NIC, PACKAGE];
 
@@ -431,6 +431,9 @@ extern char **environ;
 	for (unsigned i = 1; i < content.count; i++){
 		line = [content objectAtIndex:i-1];
 
+		if ([line hasPrefix:@"\""])
+			continue;
+
 		if (!([line hasPrefix:@"##"] || [line hasPrefix:@"export nic="] || [line hasPrefix:@"export m="] || [line hasPrefix:@"export make="] || [line hasPrefix:@"export cd="] || [line hasPrefix:@"export t="] || [line hasPrefix:@"export THEOS="] || [line hasPrefix:@"export THEOS_PACKAGE_DIR_NAME="] || [line hasPrefix:@"export DEBUG="] || [line hasPrefix:@"export ARCHS="] || [line hasPrefix:@"export FINALPACKAGE="])){
 
 			[addMe addObject:[NSString stringWithFormat:@"%@\n", line]];
@@ -445,5 +448,8 @@ extern char **environ;
 		line = [NSString stringWithFormat:@"%@%@", line, addToFile];
 
 	[line writeToFile:[NSString stringWithFormat:@"/var/mobile/%@", profile] atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+
+	runCode = [NSString stringWithFormat:@"echo \"chown 501:501 /var/mobile/%@;chmod +r /var/mobile/%@\" | gap", profile, profile];
+	[self RunCMD:runCode WaitUntilExit:YES];
 }
 @end

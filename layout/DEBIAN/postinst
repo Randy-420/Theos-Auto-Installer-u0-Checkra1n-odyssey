@@ -1,3 +1,3 @@
 #!/bin/sh
 chown 0:0 /usr/sbin/fixTheos
-chmod +s /usr/sbin/fixTheos
+chmod +srx /usr/sbin/fixTheos

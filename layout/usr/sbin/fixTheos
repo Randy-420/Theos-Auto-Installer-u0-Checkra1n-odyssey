@@ -1,39 +1,45 @@
 #!/bin/bash
-REPLACE="\$fakeroot \$cmd"
+#REPLACE="\$fakeroot \$cmd"
 
 FILE="/theos/bin"
 FILE1="/var$FILE"
 
 if [ -d "$FILE" ]; then
-	FAKEROOT=$FILE/fakeroot.sh
-	FIX="\$fakeroot perl $FILE/\$cmd"
+	FAKEROOT=$FILE
+#	FIX="\$fakeroot perl $FILE/\$cmd"
 elif [ -d "$FILE1" ]; then
-	FAKEROOT=$FILE1/fakeroot.sh
-	FIX="\$fakeroot perl $FILE1/\$cmd"
+	FAKEROOT=$FILE1
+#	FIX="\$fakeroot perl $FILE1/\$cmd"
 else
 	echo "Theos isnt installed... and thats probably you're issue. Please install Theos."
 	exit 1;
 fi
 
-n=1
+cp -f "/Library/Application Support/Theos Auto Installer/fakeroot.sh" $FAKEROOT
 
-IFS=$'\n'
+#n=1
 
-while read LINE; do
+#IFS=$'\n'
+
+#while read LINE; do
 # reading each line
-	if [ "$LINE" != "$REPLACE" ]; then
-		TEXT="${TEXT}
-${LINE}"
-	else
-		TEXT="${TEXT}
+#	if [ "$LINE" != "$REPLACE" ]; then
+#		if [ "$LINE" == "#!/bin/bash" ]; then
+#			TEXT="${LINE}"
+#		else
+#			TEXT="${TEXT}
+#${LINE}"
+#		fi
+#	else
+#		TEXT="${TEXT}
 #${LINE}
-${FIX}"
-	fi
+#${FIX}"
+#	fi
 
-	n=$((n+1))
-done < $FAKEROOT
+#	n=$((n+1))
+#done < $FAKEROOT
 
-echo "$TEXT" > $FAKEROOT
+#echo "$TEXT" > $FAKEROOT
 
 echo "Theos should now work as expected!"
 exit 0;
