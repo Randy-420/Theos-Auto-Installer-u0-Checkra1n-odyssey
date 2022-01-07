@@ -22,7 +22,7 @@ static NSString *local(NSString *local, NSString *def){
 		}
 	}
 
-	return [[NSBundle bundleWithPath:path] localizedStringForKey:local value:def table:@"tai"];
+	return def;//[[NSBundle bundleWithPath:path] localizedStringForKey:local value:def table:@"tai"];
 }
 
 static NSString *GetNSString(NSString *pkey, NSString *defaultValue, NSString *plst){
