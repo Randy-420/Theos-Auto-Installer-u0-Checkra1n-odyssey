@@ -60,13 +60,14 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 	NSString *dlLinK;
 	NSString *installHere;
 	NSString *checkInstall;
+	NSString *fixApplied;
 	NSString *failedRm;
 	NSString *successfulRm;
 	NSString *leaf;
 	NSMutableDictionary *preferences;
 	NSFileManager *fm;
 }
-
+ 
 /* ENHANCEMENTS */
 @property (nonatomic, assign) BOOL enhance;
 /* SDKS */

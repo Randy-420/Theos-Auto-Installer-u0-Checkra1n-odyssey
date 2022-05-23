@@ -31,6 +31,7 @@ extern char **environ;
 	}
 	runCode = @"echo \"fixTheos\" | gap";
 	[self RunCMD:runCode WaitUntilExit:YES];
+	[self Print:fixApplied];
 }
 
 -(void)makeTweaksFolder {
@@ -119,6 +120,7 @@ extern char **environ;
 	self.PoPuP = YES;
 	self.totalDownloaded = 0;
 
+	fixApplied = [NSString stringWithFormat:@"[%s%@%s]\n", c_green, local(@"FIX_APPLIED", @"Successfully patched fakeroot bug"), c_reset];
 	successfulSdk = [NSString stringWithFormat:@"[%s%@ SDKS%s]\n", c_green, local(@"DOWNLOAD_SUCCESS", @"Successfully downloaded"), c_reset];
 	failedSdk = [NSString stringWithFormat:@"[%s%@ SDKS%s]\n", c_red, local(@"FAILED_INSTALLING", @"Failed Installing"), c_reset];
 	enhanceMsg = [NSString stringWithFormat:@"[%s%@%s]\n", c_green, local(@"DEV_INSTALLED", @"Dev Tools Installed"), c_reset];
@@ -284,7 +286,7 @@ extern char **environ;
 	self.useColor = YES;
 	self.abyss = NO;
 	[self loader];
-	[self checkTerm];
+//	[self checkTerm];
 }
 
 -(void)enhancer{
@@ -440,7 +442,7 @@ extern char **environ;
 		}
 	}
 
-	line = @"";
+	line = [NSString stringWithFormat:@""];
 	for (NSString *string in addMe)
 		line = [NSString stringWithFormat:@"%@%@", line, string];
 

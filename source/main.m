@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
 			case 'p':
 				[TAI addToProfile:YES profile:@".profile"];
 				[TAI addToProfile:YES profile:@".zprofile"];
+				[TAI addToProfile:YES profile:@".zshrc"];
 				exit(0);
 			case 's':
 				[TAI enhancer];
@@ -77,6 +78,7 @@ int main(int argc, char* argv[]) {
 		if (opts==1){
 			[TAI addToProfile:NO profile:@".profile"];
 			[TAI addToProfile:NO profile:@".zprofile"];
+			[TAI addToProfile:NO profile:@".zshrc"];
 			[TAI popup];
 			exit(0);
 		}
@@ -96,6 +98,7 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 		[TAI addToProfile:YES profile:@".profile"];
 		[TAI addToProfile:YES profile:@".zprofile"];
+		[TAI addToProfile:YES profile:@".zshrc"];
 ///////////////////////////////////////
 ////       Folder•Handling         ////
 ///////////////////////////////////////
