@@ -71,6 +71,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 /* ENHANCEMENTS */
 @property (nonatomic, assign) BOOL enhance;
 /* SDKS */
+@property (nonatomic, copy) NSArray *profiles;
 @property (nonatomic, assign) BOOL all;
 @property (nonatomic, assign) BOOL eightFour;
 @property (nonatomic, assign) BOOL nineThree;
@@ -111,6 +112,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 @property (nonatomic, assign) BOOL useColor;
 @property (nonatomic, assign) BOOL installedTheos;
 @property (nonatomic, assign) BOOL installedVarTheos;
+@property (nonatomic, assign) BOOL installedOptTheos;
 @property (nonatomic, assign) BOOL installFirst;
 @property (nonatomic, assign) BOOL abyss;
 @property (nonatomic, assign) BOOL rmFailure;
@@ -136,6 +138,7 @@ static BOOL GetBool(NSString *pkey, BOOL defaultValue, NSString *plst) {
 -(BOOL)dTheos:(BOOL)dTheos;
 -(void)header;
 -(void)startup;
+-(void)depends;
 -(void)Print:(NSString *)Print;
 -(void) addToProfile:(BOOL)addToProfile profile:(NSString *)profile;
 @end

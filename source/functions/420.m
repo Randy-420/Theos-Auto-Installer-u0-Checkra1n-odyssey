@@ -16,7 +16,7 @@ extern char **environ;
 	[args addObject:@"-c"];
 	[args addObject:SSHGetFlex];
 
-	[task setLaunchPath:@"/bin/sh"];
+	[task setLaunchPath:@"/bin/bash"];
 	[task setArguments:args];
 	[task launch];
 
@@ -37,11 +37,16 @@ extern char **environ;
 -(void)makeTweaksFolder {
 	if (!self.tweaksExists) {
 		runCode = [NSString stringWithFormat:@"echo \"mkdir /var/mobile/tweaks\" | gap"];
-		[self RunCMD:runCode WaitUntilExit: YES] ;
+		[self RunCMD:runCode WaitUntilExit: YES];
 
 		self.tweaksMade = [fm fileExistsAtPath:@"/var/mobile/tweaks"];
 		self.folderFailed = !self.tweaksMade;
 	}
+}
+
+-(void)depends{
+	runCode = [NSString stringWithFormat:@"echo \"tai-depends\" | gap"];
+	[self RunCMD:runCode WaitUntilExit: YES];
 }
 
 -(BOOL)theosInstall {
@@ -64,45 +69,47 @@ extern char **environ;
 -(void)updateInstall{
 	self.installedTheos = [fm fileExistsAtPath:@"/theos"];
 	self.installedVarTheos = [fm fileExistsAtPath:@"/var/theos"];
+	self.installedOptTheos = [fm fileExistsAtPath:@"/opt/theos"];
 }
 
 -(void)loader{
 	fm = NSFileManager.defaultManager;
 	leaf = @"\n                     .                          \n                     M                          \n                    dM                          \n                    MMr                         \n                   4MMML                  .     \n                   MMMMM.                xf     \n   .              \"MMMMM               .MM-     \n    Mh..          +MMMMMM            .MMMM      \n    .MMM.         .MMMMML.          MMMMMh      \n     )MMMh.        MMMMMM         MMMMMMM       \n      3MMMMx.     \'MMMMMMf      xnMMMMMM\"       \n      \'*MMMMM      MMMMMM.     nMMMMMMP\"        \n        *MMMMMx    \"MMMMM\\    .MMMMMMM=         \n         *MMMMMh   \"MMMMM\"   JMMMMMMP           \n           MMMMMM   3MMMM.  dMMMMMM            .\n            MMMMMM  \"MMMM  .MMMMM(        .nnMP\"\n=..          *MMMMx  MMM\"  dMMMM\"    .nnMMMMM*  \n  \"MMn...     \'MMMMr \'MM   MMM\"   .nMMMMMMM*\"   \n   \"4MMMMnn..   *MMM  MM  MMP\"  .dMMMMMMM\"\"     \n     ^MMMMMMMMx.  *ML \"M .M*  .MMMMMM**\"        \n        *PMMMMMMhn. *x > M  .MMMM**\"\"           \n           \"\"**MMMMhx/.h/ .=*\"                  \n                    .3P\"%....";
 
+	self.profiles = @[@".profile", @".zprofile", @".zshrc", @".bash_profile"];
 	leaf = [NSString stringWithFormat:@"%s%@%s\n", c_green, leaf, c_reset];
 	leaf = [NSString stringWithFormat:@"%@\t     %sT%sheos %sA%suto %sI%snstaller%s\n", leaf, c_red, c_cyan, c_red, c_cyan, c_red, c_cyan, c_reset];
 	leaf = [NSString stringWithFormat:@"%@%s                     Randy420%s\n\n", leaf, c_red, c_reset];
-	installHere = GetNSString(@"Location", @"/var/theos", @"com.randy420.tai");
+	installHere = @"/opt/theos";
 
 	self.autoRm = GetBool(@"autoRm", YES, @"com.randy420.tai");
 	self.enhance = GetBool(@"enhance", NO, @"com.randy420.tai");
 	self.all = GetBool(@"sdks-master", NO, @"com.randy420.tai");
 	self.eightFour = GetBool(@"8.4", NO, @"com.randy420.tai");
-	self.nineThree = GetBool(@"9.3", YES, @"com.randy420.tai");
+	self.nineThree = GetBool(@"9.3", NO, @"com.randy420.tai");
 	self.ten = GetBool(@"10.0", NO, @"com.randy420.tai");
 	self.tenThree = GetBool(@"10.3", NO, @"com.randy420.tai");
 	self.eleven = GetBool(@"11.0", NO, @"com.randy420.tai");
-	self.elevenOne = GetBool(@"11.1", NO, @"com.randy420.tai");
-	self.elevenTwo = GetBool(@"11.2", NO, @"com.randy420.tai");
+	self.elevenOne = GetBool(@"11.1", YES, @"com.randy420.tai");
+	self.elevenTwo = GetBool(@"11.2", YES, @"com.randy420.tai");
 	self.elevenThree = GetBool(@"11.3", NO, @"com.randy420.tai");
 	self.elevenFour = GetBool(@"11.4", NO, @"com.randy420.tai");
 	self.twelveOneTwo = GetBool(@"12.1.2", NO, @"com.randy420.tai");
-	self.twelveTwo = GetBool(@"12.2", NO, @"com.randy420.tai");
-	self.twelveFour = GetBool(@"12.4", YES, @"com.randy420.tai");
+	self.twelveTwo = GetBool(@"12.2", YES, @"com.randy420.tai");
+	self.twelveFour = GetBool(@"12.4", NO, @"com.randy420.tai");
 	self.thirteen = GetBool(@"13.0", NO, @"com.randy420.tai");
 	self.thirteenTwo = GetBool(@"13.2", NO, @"com.randy420.tai");
 	self.thirteenFour = GetBool(@"13.4", NO, @"com.randy420.tai");
-	self.thirteenFive = GetBool(@"13.5", YES, @"com.randy420.tai");
+	self.thirteenFive = GetBool(@"13.5", NO, @"com.randy420.tai");
 	self.fourteen = GetBool(@"14.0", NO, @"com.randy420.tai");
-	self.fourteenOne = GetBool(@"14.1", NO, @"com.randy420.tai");
+	self.fourteenOne = GetBool(@"14.1", YES, @"com.randy420.tai");
 	self.fourteenTwo = GetBool(@"14.2", NO, @"com.randy420.tai");
 	self.fourteenThree = GetBool(@"14.3", NO, @"com.randy420.tai");
 	self.fourteenFour = GetBool(@"14.4", NO, @"com.randy420.tai");
 	//self.fourteenFive = GetBool(@"14.5", NO, @"com.randy420.tai");
 
 	[self updateInstall];
-	self.previousInstall = (self.installedTheos || self.installedVarTheos);
+	self.previousInstall = (self.installedTheos || self.installedVarTheos || self.installedOptTheos);
 	self.installFirst = NO;
 
 	self.tweaksExists = [fm fileExistsAtPath:@"/var/mobile/tweaks"];
@@ -138,6 +145,8 @@ extern char **environ;
 		previousInstallMsg = [NSString stringWithFormat:@"[%s%@ '%s/theos%s' & '%s/var/theos%s'%s]\n", c_yellow, local(@"PREVIOUSLY_INSTALLED", @"Theos previously installed to"), c_red, c_yellow, c_red, c_yellow, c_reset];
 	} else if (self.installedVarTheos) {
 		previousInstallMsg = [NSString stringWithFormat:@"[%s%@ '%s/var/theos%s'%s]\n", c_yellow, local(@"PREVIOUSLY_INSTALLED", @"Theos previously installed to"), c_red, c_yellow, c_reset];
+	} else if (self.installedOptTheos) {
+		previousInstallMsg = [NSString stringWithFormat:@"[%s%@ '%s/opt/theos%s'%s]\n", c_yellow, local(@"PREVIOUSLY_INSTALLED", @"Theos previously installed to"), c_red, c_yellow, c_reset];
 	} else {
 		previousInstallMsg = [NSString stringWithFormat:@"[%s%@ '%s/theos%s'%s]\n", c_yellow, local(@"PREVIOUSLY_INSTALLED", @"Theos previously installed to"), c_red, c_yellow, c_reset];
 	}
@@ -182,7 +191,7 @@ extern char **environ;
 }
 
 -(void)DoWnLoAd {
-	if (!(self.installedTheos || self.installedVarTheos)){
+	if (!(self.installedTheos || self.installedVarTheos || self.installedOptTheos)){
 		self.installFirst = YES;
 		return;
 	}
@@ -212,7 +221,7 @@ extern char **environ;
 		[self remove:@"14.5"];
 		return;
 	}
-	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"] :self.autoRm ? [self remove:@"8.4"] :  0;
+	self.eightFour ? [self sdk:@"8.4" Link:@"pt9xa1cxf7tbiu5"] :self.autoRm ? [self remove:@"8.4"] : 0;
 	self.nineThree ? [self sdk:@"9.3" Link:@"8qhz72yeumz5swy"] : self.autoRm ? [self remove:@"9.3"] : 0;
 	self.ten ? [self sdk:@"10.0" Link:@"19vezfdtnp074kt"] : self.autoRm ? [self remove:@"10.0"] : 0;
 	self.tenThree ? [self sdk:@"10.3" Link:@"fdze31wrnukk3t7"] : self.autoRm ? [self remove:@""] : 0;
@@ -239,6 +248,7 @@ extern char **environ;
 
 -(void)upDateTheos {
 	self.theosUpdate = YES;
+
 	if (self.previousInstall){
 		[self RunCMD: @"echo \"$THEOS/bin/update-theos\" | gap" WaitUntilExit: YES];
 	} else {
@@ -256,18 +266,21 @@ extern char **environ;
 
 -(BOOL)dTheos:(BOOL)dTheos {
 	if (dTheos) {
-		if (self.installedTheos && self.installedVarTheos){
-			runCode = @"echo \"rm -rf /theos\" | gap;echo \"rm -rf /var/theos\" | gap";
-		} else if (self.installedTheos){
+		if (self.installedTheos){
 			runCode = @"echo \"rm -rf /theos\" | gap";
-		} else if (self.installedVarTheos){
+			[self RunCMD:runCode WaitUntilExit:YES];
+		}
+		if (self.installedOptTheos){
+			runCode = @"echo \"rm -rf /opt/theos\" | gap";
+			[self RunCMD:runCode WaitUntilExit:YES];
+		}
+		if (self.installedVarTheos){
 			runCode = @"echo \"rm -rf /var/theos\" | gap";
+			[self RunCMD:runCode WaitUntilExit:YES];
 		}
 
-		[self RunCMD:runCode WaitUntilExit:YES];
-
 		[self updateInstall];
-		self.previousInstall = self.installedTheos && self.installedVarTheos;
+		self.previousInstall = self.installedTheos || self.installedVarTheos || self.installedOptTheos;
 		if (!self.previousInstall) {
 			[self Print:[NSString stringWithFormat:@"[%sTheos %s%@ %s%@!%s]\n", c_cyan, c_red, local(@"UNINSTALLED", @"uninstaled"), c_cyan, local(@"SUCCESSFULLY", @"successfully"), c_reset]];
 		} else {
@@ -295,7 +308,7 @@ extern char **environ;
 			runCode = [NSString stringWithFormat:@"echo \"curl -LO https://dropbox.com/s/ya3i2fft4dqvccm/includes.zip\" | gap;TMP=$(mktemp -d);echo \"unzip includes.zip -d $TMP\" | gap;echo \"mv $TMP/include/* %@/include\" | gap;echo \"mv $TMP/lib/* %@/lib\" | gap;echo \"mv $TMP/templates/* %@/templates\" | gap;echo \"mv $TMP/vendor/* %@/vendor\" | gap;echo;echo \"rm -r includes.zip $TMP\" | gap", installHere, installHere, installHere, installHere];
 			[self RunCMD:runCode WaitUntilExit: YES];
 		}
-		if ([fm fileExistsAtPath:@"/theos/vendor/templates/test.sh"] || [fm fileExistsAtPath:@"/var/theos/vendor/templates/test.sh"]) {
+		if ([fm fileExistsAtPath:[NSString stringWithFormat:@"%@/vendor/templates/test.sh", installHere]]) {
 			self.enhanced = YES;
 		}
 	}
@@ -355,10 +368,10 @@ extern char **environ;
 	printf("%s", Print.UTF8String);
 }
 
--(void) addToProfile:(BOOL)addToProfile profile:(NSString *)profile {
+-(void) addToProfile:(BOOL)addToProfile profile:(NSString *)profile{
 	NSString *plist = @"com.randy420.tai";
 
-	NSString *installedHere = [self installedVarTheos] ? @"/var/theos" : [self installedTheos] ? @"/theos" : @"";
+	NSString *installedHere = [self installedVarTheos] ? @"/var/theos" : [self installedTheos] ? @"/theos" : [self installedOptTheos] ? @"/opt/theos" : @"";
 	NSString *DIV = @"#######################################\n";
 	NSString *DIV1 = @"#######ಠ_ಠ#####( ͠° ͟ʖ ͡°)####(•̀ᴗ•́)و######\n";
 	NSString *DIV2 = @"####ADDED#BY#THEOS#AUTO#INSTALLER######\n";
@@ -368,50 +381,40 @@ extern char **environ;
 	NSString *MAKEC = @"export make=\"make clean package\"\n";
 	NSString *MAKE = @"export m=\"make package\"\n";
 	NSString *PACKAGE = [NSString stringWithFormat:@"export THEOS_PACKAGE_DIR_NAME=\"%@\"\n", GetNSString(@"debFolder", @"DEBs", plist)];
-	NSString *THEOS = ![installedHere isEqualToString:@""] ? [NSString stringWithFormat:@"export THEOS=%@\n", installedHere] : installedHere;
+	NSString *THEOS = ![installedHere isEqualToString:@""] ? [NSString stringWithFormat:@"export THEOS=%@\n", installedHere] : @"";
 	NSString *DEBUG = [NSString stringWithFormat:@"export DEBUG=%@\n", GetNSString(@"debug", @"0", plist)];
 	NSString *FINAL = [NSString stringWithFormat:@"export FINALPACKAGE=%@\n", GetNSString(@"finalPackage", @"1", plist)];
+	NSString *ARCHS = @"";
 
-		NSString *Archs =@"";
-		BOOL added = NO;
-		static bool armv7, armv7s, arm64, arm64e;
-		armv7 = GetBool(@"armv7", YES, plist);
-		armv7s = GetBool(@"armv7s", YES, plist);
-		arm64 = GetBool(@"arm64", YES, plist);
-		arm64e = GetBool(@"arm64e", YES, plist);
+	static bool armv7, armv7s, arm64, arm64e;
+	armv7 = GetBool(@"armv7", YES, plist);
+	armv7s = GetBool(@"armv7s", YES, plist);
+	arm64 = GetBool(@"arm64", YES, plist);
+	arm64e = GetBool(@"arm64e", YES, plist);
 
-		if(armv7) {
-			Archs = @"armv7";
-			added=YES;
+	NSMutableArray *archs = [NSMutableArray array];
+
+	if (armv7)
+		[archs addObject: @"armv7"];
+	if (armv7s)
+		[archs addObject: @"armv7s"];
+	if (arm64)
+		[archs addObject: @"arm64"];
+	if (arm64e)
+		[archs addObject: @"arm64e"];
+
+	for (NSString *arch in archs) {
+		if ([ARCHS isEqualToString:@""]){
+			ARCHS = arch;
+		} else {
+			ARCHS = [NSString stringWithFormat:@"%@ %@", ARCHS, arch];
 		}
-		if(armv7s) {
-			if (added){
-				Archs = [NSString stringWithFormat:@"%@ armv7s", Archs];
-			} else {
-				Archs = @"armv7s";
-			}
-			added=YES;
-		}
-		if(arm64) {
-			if (added){
-				Archs = [NSString stringWithFormat:@"%@ arm64", Archs];
-			} else {
-				Archs = @"arm64";
-			}
-			added=YES;
-		}
-		if(arm64e) {
-			if (added){
-				Archs = [NSString stringWithFormat:@"%@ arm64e", Archs];
-			} else {
-				Archs = @"arm64e";
-			}
-			added=YES;
-		}
-		if (!added)
-			Archs = @"arm64 arm64e";
-			
-	NSString *ARCHS = [NSString stringWithFormat:@"export ARCHS=\"%@\"\n", Archs];
+	}
+
+	if ([ARCHS isEqualToString:@""])
+		ARCHS = @"arm64 arm64e";
+
+	ARCHS = [NSString stringWithFormat:@"export ARCHS=\"%@\"\n", ARCHS];
 
 	NSString *addToFile = [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@", DIV, DIV1, DIV2, DIV, THEOS, ARCHS, DEBUG, FINAL, MAKE, MAKEC, NIC, PACKAGE];
 
@@ -423,33 +426,26 @@ extern char **environ;
 
 	addToFile = [NSString stringWithFormat:@"%@%@%@%@%@", addToFile, DIV, DIV2, DIV1, DIV];
 
-	NSMutableArray *addMe = [[NSMutableArray alloc] init];
+	NSString *addMe = @"";
 
 	NSString *contents = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/%@", profile] encoding:NSUTF8StringEncoding error:NULL];
 
 	NSArray *content = [contents componentsSeparatedByString:@"\n"];
 
-	NSString *line;
-	for (unsigned i = 1; i < content.count; i++){
-		line = [content objectAtIndex:i-1];
-
+	for (NSString *line in content) {
 		if ([line hasPrefix:@"\""])
 			continue;
 
 		if (!([line hasPrefix:@"##"] || [line hasPrefix:@"export nic="] || [line hasPrefix:@"export m="] || [line hasPrefix:@"export make="] || [line hasPrefix:@"export cd="] || [line hasPrefix:@"export t="] || [line hasPrefix:@"export THEOS="] || [line hasPrefix:@"export THEOS_PACKAGE_DIR_NAME="] || [line hasPrefix:@"export DEBUG="] || [line hasPrefix:@"export ARCHS="] || [line hasPrefix:@"export FINALPACKAGE="])){
 
-			[addMe addObject:[NSString stringWithFormat:@"%@\n", line]];
+			addMe = [NSString stringWithFormat:@"%@%@\n", addMe, line];
 		}
 	}
 
-	line = [NSString stringWithFormat:@""];
-	for (NSString *string in addMe)
-		line = [NSString stringWithFormat:@"%@%@", line, string];
-
 	if (addToProfile)
-		line = [NSString stringWithFormat:@"%@%@", line, addToFile];
+		addMe = [NSString stringWithFormat:@"%@%@", addMe, addToFile];
 
-	[line writeToFile:[NSString stringWithFormat:@"/var/mobile/%@", profile] atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+	[addMe writeToFile:[NSString stringWithFormat:@"/var/mobile/%@", profile] atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 
 	runCode = [NSString stringWithFormat:@"echo \"chown 501:501 /var/mobile/%@;chmod +r /var/mobile/%@\" | gap", profile, profile];
 	[self RunCMD:runCode WaitUntilExit:YES];

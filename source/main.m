@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 	"-s%s %@ '%s/theos%s' %@ '%s/var/theos%s').\n%s"
 	"-v%s %@ Theos.%s\n"
 	"-.%s %@.\n%s"
-	"-p update .profile and .zprofile",
+	"-p update .profile, .zprofile and .zshrc",
 	c_red, local(@"LAUNCH", @"Please launch"), c_cyan, c_red, local(@"ONE_OPT", @"with one option at a time"), c_cyan, c_red, c_cyan, local(@"OPTION", @"option"), c_red, c_cyan, c_magenta, local(@"-U", @"Uninstall Theos"), c_cyan, c_magenta, local(@"-r", @"Reinstall Theos"), c_cyan, c_magenta, local(@"-S", @"Install enhanced dev tools & SDK files only.(requires theos to be installed already in location"), c_green, c_magenta, local(@"OR", @"or"), c_green, c_magenta, c_cyan, c_magenta, local(@"UPDATE", @"Update"), c_cyan, c_magenta, local(@"-.", @"Remove color from the terminal output"), c_reset];
 ///////////////////////////////////////
 ////         •Options•             ////
@@ -32,9 +32,9 @@ int main(int argc, char* argv[]) {
 				TAI.useColor = NO;
 				break;
 			case 'p':
-				[TAI addToProfile:YES profile:@".profile"];
-				[TAI addToProfile:YES profile:@".zprofile"];
-				[TAI addToProfile:YES profile:@".zshrc"];
+				for (NSString *profile in TAI.profiles) {
+					[TAI addToProfile:YES profile:profile];
+				}
 				exit(0);
 			case 's':
 				[TAI enhancer];
@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 				break;
 			case 'v':
 				if (TAI.previousInstall) {
+					[TAI depends];
 					[TAI upDateTheos];
 					[TAI popup];
 				}else{
@@ -76,19 +77,23 @@ int main(int argc, char* argv[]) {
 			exit (1);
 		}
 		if (opts==1){
-			[TAI addToProfile:NO profile:@".profile"];
-			[TAI addToProfile:NO profile:@".zprofile"];
-			[TAI addToProfile:NO profile:@".zshrc"];
+			for (NSString *profile in TAI.profiles) {
+				[TAI addToProfile:NO profile:profile];
+			}
 			[TAI popup];
 			exit(0);
 		}
 	}
 
-	if (TAI.installedTheos || TAI.installedVarTheos) {
+	if (TAI.installedTheos || TAI.installedVarTheos || TAI.installedOptTheos) {
 		[TAI header];
 		[TAI Print:[NSString stringWithFormat:@"%sTheos%s %@ '%stai -r%s' %@ '%stai -u%s' %@%s\n", c_cyan, c_green, local(@"ALREADY", @"already installed, run"), c_cyan, c_green, local(@"TO_REINSTALL", @"to reinstall or"), c_cyan, c_red, local(@"UNINSTALL", @"uninstall"), c_reset]];
 		exit(1);
 	}
+////////////////////////////////////////
+////      •Theos•Dependencies•       ////
+////////////////////////////////////////
+	[TAI depends];
 ////////////////////////////////////////
 ////          •git•Theos•           ////
 ////////////////////////////////////////
@@ -96,9 +101,9 @@ int main(int argc, char* argv[]) {
 ///////////////////////////////////////
 ////     .profile•Handling         ////
 ///////////////////////////////////////
-		[TAI addToProfile:YES profile:@".profile"];
-		[TAI addToProfile:YES profile:@".zprofile"];
-		[TAI addToProfile:YES profile:@".zshrc"];
+		for (NSString *profile in TAI.profiles) {
+			[TAI addToProfile:YES profile:profile];
+		}
 ///////////////////////////////////////
 ////       Folder•Handling         ////
 ///////////////////////////////////////

@@ -1,0 +1,184 @@
+#! /bin/bash
+
+#Unused variable.
+B='\x1B[30m'				#Black
+LG='\033[1;32m'			#Green
+P='\033[0;35m'			#Purple
+NC='\033[0m'				#Default shell colour
+settings=0
+
+uncoolstarDepends="com.randy420.taidependscoolstar"
+uncoolstarVersion=0.3
+otherDepends="com.randy420.taidependsother"
+otherVersion=0.2
+
+checkRoot(){
+	if [[ "$EUID" -ne 0 ]]; then
+		echo "$(tput setaf 1;)TAI Installer needs to be run with root privileges."
+		exit
+	fi
+}
+
+checkInstall(){
+	Depends="$1"
+	shift 1
+	Version="$1"
+
+	installedVersion=$(apt list --installed 2>/dev/null | grep -w $Depends | sed 's/randy420//g' | sed 's/[^0-9]*//g' | sed -r 's/(.{1})/\1./g' |  sed 's/.$//')
+
+	if [[ "$installedVersion" == "$Version" ]]; then
+		echo -e "${LG}Dependencies up to date${NC}\n"
+		return 0
+	elif [[ "$installedVersion" == "" ]]; then
+		echo -e "${P}Should install dependencies${NC}\n"
+		return 1
+	else
+		echo -e "${P}Should upgrade dependencies${NC}\n"
+		return 2
+	fi
+}
+
+whatsHappening(){
+	wagwan=$1
+	shift 1
+	installType=$1
+	shift 1
+	package=$1
+
+	if [ "$settings" -eq 0 ]; then
+		(tput setaf 6)
+	fi
+	echo -e "${wagwan}\n"
+	if [ "$settings" -eq 0 ]; then
+		(tput setaf 2)
+		echo -e "I suggest you connect to Wi-Fi network before proceeding.\n"
+		sleep 3
+
+		echo -e "Hey seriously, if you don't want mobile data (less than ~300MB) to be used.\n"
+		sleep 5
+	fi
+
+	apt-get ${installType} ${package} -y --allow-unauthenticated
+}
+while getopts ":~" opt; do
+	case ${opt} in
+		"~") # process option h
+			B=''			#Black
+			LG=''			#Green
+			P=''			#Purple
+			NC=''			#Default shell colour
+			settings=1
+		;;
+	esac
+done
+
+procursus=(/.procursus_strapped)
+
+if [ "$settings" -eq 0 ]; then
+#========================================
+	iosv="$(sw_vers -productVersion)"
+
+	jbd=/private/var/jb/cheyote
+	if test -d "$jbd"; then
+		jb=$(tput setaf 5;)"Cheyote"
+	else
+		jbd=/taurine
+		if test -d "$jbd"; then
+			jb=$(tput setaf 5;)"Taurine"
+		else
+			jbd=/odyssey
+			if test -d "$jbd";then 
+				jb="$(tput setaf 5;)Odyssey"
+			else
+				jbd=/.installed_odyssey
+				if test -f "$jbd"; then 
+					jb="$(tput setab 0;)$(tput setaf 5;)Odysseyra1n"
+				else
+					jbd=/.installed_unc0ver
+					if test -f "$jbd"; then
+						jb="$(tput setaf 0;)$(tput setab 7;)unc0ver"
+					else
+						jbd=/.bootstrapped
+						if test -f "$jbd"; then
+							jb="$(tput setaf 7;)$(tput setab 0;)checkra1n"
+						else
+							jb="$(tput setaf 1;)Unknown Jailbreak?"
+						fi
+					fi
+				fi
+			fi
+		fi
+	fi
+#========================================
+	if [[ $iosv -eq 15 ]]; then
+		echo "$(tput setaf 1;) iOS 15 not supported at this moment "
+		exit
+	fi
+#========================================
+
+	(tput setab 0)
+	(tput setaf 2)
+	clear
+
+cat << EOF
+ _____  _     ___ 
+|_   _|/ \   |_ _|
+  | | / _ \   | | 
+  | |/ ___ \  | | 
+  |_/_/   \_\____|  
+
+ ___           _        _ _           
+|_ _|_ __  ___| |_ __ _| | | ___ _ __ 
+ | ||  _ \/ __| __/ _  | | |/ _ \  __|
+ | || | | \__ \ || (_| | | |  __/ |   
+|___|_| |_|___/\__\__ _|_|_|\___|_|   
+
+EOF
+
+echo -e "\nTheos Dependency Installer:\nWritten by: Turann and Randy420\n"
+
+#========================================
+	echo "iOS Version: $iosv"
+	echo "Jailbreak: $jb"
+	(tput setab 0)
+	(tput setaf 2)
+#========================================
+	echo ""
+	echo ""
+fi
+
+checkRoot
+
+if test -f "$procursus" ; then
+	checkInstall "${uncoolstarDepends}" "${uncoolstarVersion}"
+	whatToDo="$?"
+
+	if [[ "$whatToDo" == "0" ]]; then
+		echo -e "\n"
+	elif [[ "$whatToDo" == "1" ]]; then
+		whatsHappening "Should install from Procursus" "install" "${uncoolstarDepends}"
+	else
+		whatsHappening "Should update from Procursus" "upgrade" "${uncoolstarDepends}"
+	fi
+else
+	checkInstall "${otherDepends}" "${otherVersion}"
+	whatToDo="$?"
+
+	if [[ "$whatToDo" == "0" ]]; then
+		echo -e "\n"
+	elif [[ "$whatToDo" == "1" ]]; then
+		whatsHappening "Should install from Bingner" "install" "${otherDepends}"
+	else
+		whatsHappening "Should update from Bingner" "upgrade" "${otherDepends}"
+	fi
+fi
+
+echo ""
+
+#To install TAI.
+#apt install com.randy420.tai -y --allow-unauthenticated
+dpkg --configure -a
+#Just to make sure everything is configured.
+echo ""
+echo "We are done."
+exit 0
