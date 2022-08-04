@@ -8,9 +8,9 @@ NC='\033[0m'				#Default shell colour
 settings=0
 
 uncoolstarDepends="com.randy420.taidependscoolstar"
-uncoolstarVersion=0.3
+uncoolstarVersion=0.4
 otherDepends="com.randy420.taidependsother"
-otherVersion=0.2
+otherVersion=0.3
 
 checkRoot(){
 	if [[ "$EUID" -ne 0 ]]; then
