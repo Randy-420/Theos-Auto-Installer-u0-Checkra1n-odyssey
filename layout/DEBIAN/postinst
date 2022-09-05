@@ -1,5 +1,12 @@
-#!/bin/sh
-chown 0:0 /usr/sbin/fixTheos
-chmod +srx /usr/sbin/fixTheos
-chown 0:0 /usr/sbin/tai-depends
-chmod +srx /usr/sbin/tai-depends
+#! /bin/bash
+
+chown 0:0 /usr/bin/tai -cv
+chmod 06755 /usr/bin/tai -cv
+
+chown 0:0 /usr/sbin/tai-depends -cv
+chmod 06755 /usr/sbin/tai-depends -cv
+
+chown 0:0 /usr/sbin/fixTheos -cv
+chmod 06755 /usr/sbin/fixTheos -cv
+
+exit 0
